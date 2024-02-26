@@ -79,6 +79,8 @@ public class User implements UserDetails {
     private LocalDateTime createAt;
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updateAt;
+    private Boolean isActive;
+
 
     private String title;
 
