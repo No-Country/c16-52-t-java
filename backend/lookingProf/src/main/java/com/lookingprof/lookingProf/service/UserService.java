@@ -60,7 +60,6 @@ public class UserService implements IUserService {
     @Override
     public List<UserResponseDTO> listAllActives() {
         List<User> userList = userRepository.findAllNotDeleted();
-        System.out.println(userList);
         if(!userList.isEmpty()){
             List<UserResponseDTO> listUsersDto = new ArrayList<>();
             userList.forEach(user -> {
