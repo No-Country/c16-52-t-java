@@ -14,6 +14,9 @@ import java.util.List;
 @Repository
 public interface IUserRepository extends JpaRepository<User, Integer> {
 
+    @Query("SELECT u FROM User u WHERE u.isActive = true")
+    List<User> findAllNotDeleted();
+
     List<User> findByFirstName(String userName);
 
     Optional<User> findByEmail(String email);
