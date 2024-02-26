@@ -1,5 +1,6 @@
 package com.lookingprof.lookingProf.jwt;
 
+import com.lookingprof.lookingProf.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,18 +21,23 @@ public class JwtService {
     private final static String SECRET_KEY = "gsaQUPJ6ppr7MNZgzHYnGQ==MNbmLOqV65YF9mqR0VPUaQ==";
 
     /**
-     * @param userDetails son los datos del usuario a quien se le creará el token
+     * @param user son los datos del usuario a quien se le creará el token
      * @return devuelve un string con el token generado
      */
-    public String getToken(UserDetails userDetails){
+    public String getToken(User user){
         final int dayToMilliseconds = 1000 * 60 * 60 * 24;
 
         Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("role", user.getAuthorities());
+        extraClaims.put("imageProfile", user.getImageUrl());
+        extraClaims.put("id", user.getIdUser());
+        extraClaims.put("lastName", user.getLastName());
+        extraClaims.put("firstName", user.getFirstName());
 
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + dayToMilliseconds))
                 .signWith(getKey(), SignatureAlgorithm.HS256)

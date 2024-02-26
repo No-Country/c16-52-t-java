@@ -1,5 +1,11 @@
 package com.lookingprof.lookingProf.model;
 
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 import com.lookingprof.lookingProf.model.Enum.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -12,8 +18,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+
 
 @Entity
 @Data
@@ -25,13 +34,14 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idUser;
-    @NotEmpty(message = "El apellido no puede estar vacío")
+        @NotEmpty(message = "El apellido no puede estar vacío")
     private String lastName;
     @NotEmpty(message = "El nombre de usuario no puede estar vacío")
-    private String userName;
+    private String firstName;
 
     @Column(unique = true)
     @NotEmpty(message = "El email no puede estar vacío")
+    @Email
     private String email;
     @NotEmpty(message = "La contraseña no puede estar vacía")
     private String password;
@@ -55,6 +65,23 @@ public class User implements UserDetails {
     private Profession profession;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Size(max = 250)
+    private String description;
+
+    @OneToMany(mappedBy = "userOrigin")
+    private List<Comment> commentsSubmitted;
+
+    @OneToMany(mappedBy = "userDestination")
+    private List<Comment> commentsReceived;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime updateAt;
+
+    private String title;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority((role.name())));

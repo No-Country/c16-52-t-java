@@ -10,14 +10,11 @@ import java.util.List;
 @Repository
 public interface ICommentRepository extends JpaRepository<Comment, Integer> {
 
-
     List<Comment> findByUserOrigin(User user);
-
 
     List<Comment> findByUserDestination(User user);
 
     List<Comment> findByUserDestinationAndQualification(User user, Integer qualify);
-
 
 }
 

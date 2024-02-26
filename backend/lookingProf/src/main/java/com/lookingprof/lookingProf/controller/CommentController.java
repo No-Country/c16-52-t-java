@@ -1,5 +1,6 @@
 package com.lookingprof.lookingProf.controller;
 
+import com.lookingprof.lookingProf.dto.CommentResponseDto;
 import com.lookingprof.lookingProf.model.Comment;
 import com.lookingprof.lookingProf.model.User;
 import com.lookingprof.lookingProf.service.CommentService;
@@ -24,7 +25,7 @@ public class CommentController {
 
 
     @GetMapping()
-    public ResponseEntity<List<Comment>> getAllComments(){
+    public ResponseEntity<List<CommentResponseDto>> getAllComments(){
         try{
             return ResponseEntity.ok(commentService.listAll());
         }catch (Exception e){
@@ -33,42 +34,36 @@ public class CommentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Comment> getById(Integer id ){
-        try{
-            Optional<Comment> comment = commentService.findById(id);
-            return comment.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.notFound().build());
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<CommentResponseDto> getById(Integer id ){
+        return commentService.findById(id);
     }
 
-
-    @GetMapping("/getByUserDestination/{idUser}")
-    public ResponseEntity<List<Comment>> getByDestinatiion(@PathVariable Integer idUser){
+    /*@GetMapping("/getByUserDestination/{idUser}")
+    public ResponseEntity<List<CommentResponseDto>> getByDestination(@PathVariable Integer idUser){
         try{
             User user = userService.findById(idUser).orElse(null);
-            List<Comment> commentList = commentService.findByUserDestination(user);
-            return ResponseEntity.ok(commentList);
+            List<CommentResponseDto> commentResponseDtos = commentService.findByUserDestination(user);
+            return ResponseEntity.ok(commentResponseDtos);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
+    }*/
 
-    @GetMapping("/getByUserOrigin/{idUser}")
-    public ResponseEntity<List<Comment>> getByOrigin(@PathVariable Integer idUser){
+    /*@GetMapping("/getByUserOrigin/{idUser}")
+    public ResponseEntity<List<CommentResponseDto>> getByOrigin(@PathVariable Integer idUser){
         try{
             User user = userService.findById(idUser).orElse(null);
-            List<Comment> commentList = commentService.findByUserOrigin(user);
-            return ResponseEntity.ok(commentList);
+            List<CommentResponseDto> commentResponseDtos = commentService.findByUserOrigin(user);
+            return ResponseEntity.ok(commentResponseDtos);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
+    }*/
 
     @PostMapping
-    public ResponseEntity<Comment> createComment(@RequestBody Comment dto){
+    public ResponseEntity<CommentResponseDto> createComment(@RequestBody Comment dto){
         try{
-            Comment createdComment = commentService.createComment(dto);
+            CommentResponseDto createdComment = commentService.createComment(dto);
             return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -77,9 +72,9 @@ public class CommentController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Comment> updateComment(@PathVariable Integer id, @RequestBody Comment dto){
+    public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Integer id, @RequestBody Comment dto){
         try{
-            Comment updatedComment = commentService.updateComment(id, dto);
+            CommentResponseDto updatedComment = commentService.updateComment(id, dto);
             if (updatedComment!=null) return new ResponseEntity<>(updatedComment, HttpStatus.OK);
             else return ResponseEntity.notFound().build();
         }catch (Exception e){
