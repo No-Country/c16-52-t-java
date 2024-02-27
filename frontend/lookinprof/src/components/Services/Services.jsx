@@ -4,7 +4,7 @@
   import { Button } from '@mui/material';
   import { RiStarSFill, RiStarSLine } from "react-icons/ri";
   import mountain from "../../assets/montain.png";
-  import servicesImage from "../../assets/servicesImage.svg";
+  import imageServices from "../../assets/imageServices.svg";
   import InputLabel from '@mui/material/InputLabel';
   import MenuItem from '@mui/material/MenuItem';
   import FormControl from '@mui/material/FormControl';
@@ -108,7 +108,7 @@
         <div className='flex flex-row items-center justify-center gap-[20px]'>
         
         <img
-        src={servicesImage}
+        src={imageServices}
         alt="manSettings"
         className=""
         style={{ height:500}} 
