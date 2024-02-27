@@ -15,6 +15,7 @@ public class Province {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idProvince;
+    @Column(unique = true)
     private String nameProvince;
 
 }

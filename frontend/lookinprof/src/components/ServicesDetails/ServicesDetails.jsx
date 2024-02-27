@@ -26,6 +26,7 @@ const ServicesDetails = () => {
         }
     }
     
+    window.scrollTo(0, 0);
 
     const handleClickCard = (id) => {
         navigate(`/services/${id}`);

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -14,12 +15,13 @@ import java.util.Date;
 public class UserResponseDTO {
 
     private int idUser;
-    private Date createAt;
+    private LocalDateTime createAt;
     private String address;
     private String email;
     private String firstName;
     private String lastName;
     private String imageUrl;
+    private String phone;
 
     public UserResponseDTO (User user){
         this.idUser=user.getIdUser();
@@ -28,7 +30,6 @@ public class UserResponseDTO {
         this.email= user.getEmail();
         this.firstName= user.getFirstName();
         this.lastName= user.getLastName();
-        this.imageUrl= user.getImageUrl();
     }
 
 }

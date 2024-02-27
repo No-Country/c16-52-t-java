@@ -43,6 +43,7 @@ const NavBar = () => {
     // Función para alternar la apertura/cierre del menú
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
+        
     };
 
     // Gancho de efecto para manejar clics fuera del menú para cerrarlo
@@ -121,7 +122,7 @@ const NavBar = () => {
                             {/* Menú desplegable para acciones del usuario */}
                             {menuOpen && (
                                 <div className="absolute top-10 right-0 z-10 text-end p-2">
-                                    <NavLink to={'/profile'} className='block py-2 px-4 text-green-600 hover:bg-gray-800/10 rounded-xl font-bold'>
+                                    <NavLink to={`/profile/${currentUser.id}`} className='block py-2 px-4 text-green-600 hover:bg-gray-800/10 rounded-xl font-bold'>
                                         Perfil
                                     </NavLink>
                                     <NavLink to={'/login'} className='block py-2 px-4 text-red-600 hover:bg-gray-800/10 rounded-xl font-bold' onClick={logout}>

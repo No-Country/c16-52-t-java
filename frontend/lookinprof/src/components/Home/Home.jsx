@@ -2,6 +2,7 @@ import { Button } from '@mui/material';
 import React from 'react';
 import { FaStar } from "react-icons/fa";
 import ImageHome from './../../assets/Group.svg';
+import bgCard from './../../assets/bgCardHome.svg';
 import ImageHome2 from './../../assets/ImageHomeSection2.svg';
 import Cards from '../../UI/cards/Cards';
 import { servicesData } from '../../utils';
@@ -27,14 +28,15 @@ const Home = () => {
       navigate('/login');
     }
   };
-  
+  window.scrollTo(0, 0);
   return (
     <div className='flex flex-col justify-center items-center'>
       {/* Section 1 de la pagina principal */}
+    <div style={{ backgroundImage: `url(${bgCard})`, backgroundRepeat: 'no-repeat', backgroundPosition: 'top', backgroundSize: 'cover' }}>
       <div className='m-6 p-6 flex flex-col md:flex-row justify-center items-center lg:w-[1100px] min-w-[320px] p-auto '>
         <div className=' lg:p-6 w-full md:w-[60%] flex flex-col items-center lg:items-start lg:justify-between gap-6'>          
           <h2 className='lg:mt-4 text-3xl text-[#004466] font-black'>¿Necesitas ayuda? Encuentra al profesional perfecto aquí</h2>
-          <p className=''>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus nullam eget felis eget nunc lobortis mattis aliquam. </p>
+          <p className='text-white'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus nullam eget felis eget nunc lobortis mattis aliquam. </p>
           <div className='w-26'>
             <Button variant='contained' color='primary' onClick={handleClickContact}>Quiero Contratar</Button>
           </div>
@@ -45,9 +47,13 @@ const Home = () => {
             <span className='text-xs'>Nuestra valoración  4.9 de 1200 reviews</span>
           </div>
         </div >
-        <img src={ImageHome} alt="Home" className='m-4 hidden lg:block max-h-[400px] md:max-h-[500px] rounded-xl' />
+        <div  className='m-4 hidden lg:block max-h-[400px] md:max-h-[500px] rounded-xl' >
+
+        </div>
+        {/* <img src={ImageHome} alt="Home" className='m-4 hidden lg:block max-h-[400px] md:max-h-[500px] rounded-xl' /> */}
       </div>
 
+    </div>
       {/* Section 2 de la pagina principal */}
       <section className='flex flex-col items-center justify-center w-full gap-y-4'>
         <h3 className='text-[#004466] text-xl text-center p-4'>Nuestra selección de profesionales</h3>

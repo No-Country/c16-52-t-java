@@ -8,6 +8,7 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:3.4,
       image:DemoImage,
+      provincia:'Chaco',
       city: 'Resistencia',
       feedback:[
         {
@@ -56,6 +57,7 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:5,
       image:DemoImage,
+      provincia:'Salta',
       city: 'Salta',
       feedback:[
         {
@@ -104,7 +106,8 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:3.2,
       image:DemoImage,
-      city: 'Tierra del Fuego',
+      provincia: 'Tierra del Fuego',
+      city:'Usuahia',
       feedback:[
         {
           id:1,
@@ -152,6 +155,7 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:3,
       image:DemoImage,
+      provincia: 'Santa Fe',
       city: 'Rosario',
       feedback:[
         {
@@ -201,6 +205,7 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:2.3,
       image:DemoImage,
+      provincia: 'Santa Fe',
       city: 'Santa Fe',
       feedback:[
         {
@@ -249,7 +254,8 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:1,
       image:DemoImage,
-      city: 'Misiones',
+      provincia:'Misiones',
+      city: 'Posadas',
       feedback:[
         {
           id:1,
@@ -297,7 +303,8 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:1.2,
       image:DemoImage,
-      city: 'Misiones',
+      provincia:'Misiones',
+      city: 'Posadas',
       feedback:[
         {
           id:1,
@@ -345,7 +352,8 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:3,
       image:DemoImage,
-      city: 'Misiones',
+      provincia: 'Misiones',
+      city: 'Posadas',
       feedback:[
         {
           id:1,
@@ -393,7 +401,9 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:3.5,
       image:DemoImage,
-      city: 'Misiones',
+      provincia: 'Misiones',
+      city: 'Posadas',
+
       feedback:[
         {
           id:1,
@@ -441,7 +451,8 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:3.7,
       image:DemoImage,
-      city: 'Misiones',
+      provincia: 'Misiones',
+      city: 'Posadas',
       feedback:[
         {
           id:1,
@@ -489,7 +500,8 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:3.3,
       image:DemoImage,
-      city: 'Córdoba',
+      provincia: 'Córdoba',
+      city:'Córdoba',
       feedback:[
         {
           id:1,
@@ -537,7 +549,8 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:4,
       image:DemoImage,
-      city: 'Córdoba',
+      provincia: 'Córdoba',
+      city:'Córdoba',
       feedback:[
         {
           id:1,
@@ -585,7 +598,8 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:4.3,
       image:DemoImage,
-      city: 'Córdoba',
+      provincia: 'Córdoba',
+      city:'Córdoba',
       feedback:[
         {
           id:1,
@@ -633,6 +647,7 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:3,
       image:DemoImage,
+      provincia:'Buenos Aires',
       city: 'Escobar',
       feedback:[
         {
@@ -681,7 +696,8 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:1.9,
       image:DemoImage,
-      city: 'La Pampa',
+      provincia: 'La Pampa',
+      city:'Santa Rosa',
       feedback:[
         {
           id:1,
@@ -729,6 +745,7 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:2,
       image:DemoImage,
+      provincia:'Córdoba',
       city: 'Rio Cuarto',
       feedback:[
         {
@@ -777,6 +794,7 @@ export const servicesData = [
       description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
       starts:4.9,
       image:DemoImage,
+      provincia:'Mendoza',
       city: 'San Rafael',
       feedback:[
         {

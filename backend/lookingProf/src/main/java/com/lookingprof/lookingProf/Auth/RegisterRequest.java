@@ -1,6 +1,9 @@
 package com.lookingprof.lookingProf.Auth;
 
 
+import com.lookingprof.lookingProf.model.Enum.Role;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +19,8 @@ public class RegisterRequest {
     String firstName;
     String lastName;
     String password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 
 }

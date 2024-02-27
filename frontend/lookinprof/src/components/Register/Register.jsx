@@ -18,9 +18,9 @@ import { Link, useNavigate } from "react-router-dom";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import axios from "axios";
 
 const Register = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [value, setValue] = useState("user");
   const [showPassword, setShowPassword] = useState(false);
@@ -29,64 +29,71 @@ const Register = () => {
     firstName: "",
     lastName: "",
     password: "",
-    role: "user",
+    role: "USER",
   });
-  const [formErrors, setFormErrors] = useState({
-    email: "",
-    firstName: "",
-    lastName: "",
-    password: "",
-    role: "",
-  });
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
 
   const handleChange = (event) => {
-    setValue(event.target.value);
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-    setFormErrors({ ...formErrors, [name]: "" });
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    if (formErrors[name]) {
+      setFormErrors({ ...formErrors, [name]: "" });
+    }
   };
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
+  
+  const handleMouseDownPassword = (event) => event.preventDefault();
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
+  const validateEmail = (email) => 
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email.toLowerCase());
+
+  const checkEmailExists = async (email) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/user/email?email=${email}`);
+      if (response.data.email) {
+        setFormErrors(prevErrors => ({ ...prevErrors, email: 'El correo electrónico ya está registrado.' }));
+        return true; // Correo ya existe
+      }
+      return
+    } catch (error) {
+      console.error('Error al verificar el correo electrónico', error);
+    }
   };
 
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    setValue(event.target.value);
-    let errors = {};
-    let formIsValid = true;
-    // Validation for email
-    if (!formData.email.trim() || formData.email.length === 0) {
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    const errors = {};
+    let isValid = true;
+
+    if (!formData.email) {
       errors.email = "El correo electrónico es requerido";
-      formIsValid = false;
-    }
-    // Validation for firstName
-    if (!formData.firstName.trim() || formData.firstName.length === 0) {
-      errors.firstName = "El nombre es requerido";
-      formIsValid = false;
-    }
-    // Validation for lastName
-    if (!formData.lastName.trim() || formData.lastName.length === 0) {
-      errors.lastName = "El apellido es requerido";
-      formIsValid = false;
-    }
-    // Validation for password
-    if (!formData.password.trim() || formData.password.length < 8) {
-      errors.password = "Revisa la contraseña";
-      formIsValid = false;
+      isValid = false;
+    } else if (!validateEmail(formData.email)) {
+      errors.email = "El formato del correo electrónico no es correcto";
+      isValid = false;
     }
 
-    if (formIsValid) {
-      localStorage.setItem("currentUser", JSON.stringify(formData));
-      dispatch(setCurrentUser(formData));
-      setLoggedIn(true);
-      navigate("/");
-    } else {
-      setFormErrors(errors);
+    if (!formData.firstName.trim()) {
+      errors.firstName = "El nombre es requerido";
+      isValid = false;
     }
+
+    if (!formData.lastName.trim()) {
+      errors.lastName = "El apellido es requerido";
+      isValid = false;
+    }
+
+    if (!formData.password) {
+      errors.password = "La contraseña es requerida";
+      isValid = false;
+    } else if (formData.password.length < 8) {
+      errors.password = "La contraseña debe tener al menos 8 caracteres";
+      isValid = false;
+    }
+
+    setFormErrors(errors);
+    return isValid;
   };
 
   return (
@@ -120,7 +127,7 @@ const Register = () => {
                 onChange={handleChange}
               >
                 <FormControlLabel
-                  value="user"
+                  value="USER"
                   control={<Radio />}
                   label="Usuario"
                 />
@@ -131,6 +138,8 @@ const Register = () => {
                 />
               </RadioGroup>
             </FormControl>
+
+            {/* Email Field */}
             <TextField
               name="email"
               label="Correo Electrónico"
@@ -145,6 +154,7 @@ const Register = () => {
               {formErrors.email}
             </FormHelperText>
 
+            {/* First Name Field */}
             <TextField
               name="firstName"
               label="Nombres"
@@ -153,11 +163,13 @@ const Register = () => {
               size="small"
               onChange={handleChange}
               error={!!formErrors.firstName}
+              helperText={formErrors.firstName || ''}
             />
             <FormHelperText error className="text-xs">
               {formErrors.firstName}
             </FormHelperText>
 
+            {/* Last Name Field */}
             <TextField
               name="lastName"
               label="Apellidos"
@@ -166,8 +178,8 @@ const Register = () => {
               size="small"
               onChange={handleChange}
               error={!!formErrors.lastName}
+              helperText={formErrors.lastName || ''}
             />
-            <FormHelperText error>{formErrors.lastName}</FormHelperText>
 
             <FormControl variant="outlined">
               <InputLabel htmlFor="outlined-adornment-password" size="small">
@@ -178,42 +190,37 @@ const Register = () => {
                 id="outlined-adornment-password"
                 type={showPassword ? "text" : "password"}
                 endAdornment={
-                  <InputAdornment position="end" size="small">
+                  <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
-                      size="small"
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 }
                 label="Contraseña"
-                size="small"
                 onChange={handleChange}
                 error={!!formErrors.password}
               />
+              <FormHelperText error>{formErrors.password || ''}</FormHelperText>
             </FormControl>
-            <FormHelperText error>{formErrors.password}</FormHelperText>
 
             <Button variant="contained" className="shadow-2xl" type="submit">
               Registrarme
             </Button>
           </form>
-          {loggedIn && (
-            <p className="pt-5 text-xs font-medium">
-              ¡Registro y login exitosos!
-            </p>
-          )}
-          <p className="pt-5 text-xs font-medium">
+
+          {/* Login Redirect */}
+          <Typography variant="body2" className="pt-5">
             Ya tienes una cuenta,{" "}
-            <Link to={`/login`} className="text-blue-700 blod font-semibold ">
+            <Link to="/login" className="text-blue-700 font-semibold">
               haz clic aquí
             </Link>
             .
-          </p>
+          </Typography>
        
       </div>
     </div>
