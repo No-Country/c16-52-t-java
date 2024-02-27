@@ -111,6 +111,7 @@
         src={servicesImage}
         alt="manSettings"
         className=""
+        style={{ height:500}} 
       />
           
           <div className='flex flex-col items-start justify-center gap-y-10 '>
