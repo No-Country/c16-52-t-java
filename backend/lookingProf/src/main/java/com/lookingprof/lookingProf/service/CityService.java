@@ -28,7 +28,7 @@ public class CityService implements ICityService{
 
     @Override
     public void deleteCity(Integer idCity) {
-        cityRepository.findById(idCity);
+        cityRepository.deleteById(idCity);
     }
 
     @Override

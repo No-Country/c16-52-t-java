@@ -27,6 +27,7 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
     //@Query("SELECT u FROM User u WHERE u.qualification IS NOT NULL")
     List<User> findByQualification(int qualification);
 
-
+    @Query("SELECT u FROM User u WHERE u.isActive = true")
+    List<User> findAllNotDeleted();
 
 }

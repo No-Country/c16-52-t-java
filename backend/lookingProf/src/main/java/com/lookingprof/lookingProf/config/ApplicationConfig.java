@@ -1,7 +1,6 @@
 package com.lookingprof.lookingProf.config;
 
 import com.lookingprof.lookingProf.repository.IUserRepository;
-import com.lookingprof.lookingProf.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

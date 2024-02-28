@@ -27,6 +27,7 @@ public class AdvertisementController {
     }
 
     //create advertisement
+    @PostMapping("/create")
     public String createAdvertisement (@RequestBody Advertisement advertisement){
         advertisementService.saveAdvertisement(advertisement);
         return "Created Advertisement";

@@ -22,16 +22,18 @@ import axios from "axios";
 
 const Register = () => {
   const dispatch = useDispatch();
-  const [value, setValue] = useState("user");
-  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     firstName: "",
     lastName: "",
     password: "",
     role: "USER",
+    name_province:"Santa Fe",
+    city:"Santa Fe"
   });
   const [formErrors, setFormErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -61,8 +63,7 @@ const Register = () => {
     }
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
+  const validateForm = () => {
     const errors = {};
     let isValid = true;
 
@@ -96,6 +97,30 @@ const Register = () => {
     return isValid;
   };
 
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    const doesEmailExist = await checkEmailExists(formData.email);
+    if(doesEmailExist) {
+      return; // No continúa si el correo ya existe
+    }
+
+    try {
+      const response = await axios.post('http://localhost:8080/auth/register', formData);
+      const token = response.data.token;
+      localStorage.setItem('jwt', token);
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      dispatch(setCurrentUser(payload));
+      alert(`Gracias ${payload.firstName} por registrarte`);
+      navigate('/');
+    } catch (error) {
+      console.error("Error during registration", error);
+    }
+  };
   return (
     <div
       className=" flex flex-col-reverse lg:relative h-screen flex lg:justify-center items-center"

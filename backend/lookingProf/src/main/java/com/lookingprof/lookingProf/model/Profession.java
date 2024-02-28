@@ -14,8 +14,10 @@ public class Profession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idProfession;
+
     private String nameProfession;
-    @OneToMany
+
+    @OneToMany(mappedBy = "profession")
     private List<User> listUsers;
 
 }

@@ -14,6 +14,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,14 +52,17 @@ public class User implements UserDetails {
     private String address;
 //    @NotEmpty(message = "El país no puede estar vacío")
     private String country;
-    @OneToOne
+
+    @ManyToOne
     @JoinColumn(name = "idProvince", referencedColumnName = "idProvince")
 //    @NotEmpty(message = "Debe seleccionar una provincia")
     private Province province;
-    @OneToOne
-    @JoinColumn(name = "city")
+
+    @ManyToOne
+    @JoinColumn(name = "idCity", referencedColumnName = "idCity")
 //    @NotEmpty(message = "Debe seleccionar una ciudad")
     private City city;
+
     private Integer qualification;
     private String imageUrl;
     @ManyToOne
@@ -75,12 +80,17 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "userDestination")
     private List<Comment> commentsReceived;
 
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createAt;
+
+    @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
     private LocalDateTime updateAt;
 
-    private String title;
+    private Boolean isActive;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -3,13 +3,13 @@ package com.lookingprof.lookingProf.service;
 import com.lookingprof.lookingProf.Auth.AuthResponse;
 import com.lookingprof.lookingProf.Auth.LoginRequest;
 import com.lookingprof.lookingProf.Auth.RegisterRequest;
+import com.lookingprof.lookingProf.dto.UserRequestDTO;
 import com.lookingprof.lookingProf.dto.UserResponseDTO;
 import com.lookingprof.lookingProf.exceptions.UserDeleteException;
 import com.lookingprof.lookingProf.exceptions.UserUpdateException;
 import com.lookingprof.lookingProf.jwt.JwtService;
 import com.lookingprof.lookingProf.model.City;
 import com.lookingprof.lookingProf.model.Enum.Role;
-import com.lookingprof.lookingProf.model.Profession;
 import com.lookingprof.lookingProf.model.Province;
 import com.lookingprof.lookingProf.model.User;
 import com.lookingprof.lookingProf.repository.IUserRepository;
@@ -22,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +40,12 @@ public class UserService implements IUserService {
 
     @Autowired
     JwtService jwtService;
+
+    @Autowired
+    CityService cityService;
+
+    @Autowired
+    ProvinceService provinceService;
 
     @Override
     @Transactional(readOnly = true)
@@ -81,27 +86,26 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<User> findById(Integer id) {
+    public Optional<UserResponseDTO> findById(Integer id) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty()) {
             return Optional.empty();
         }
         User user = userOptional.get();
 
-        return Optional.of(user);
+        return Optional.of(new UserResponseDTO(user));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Optional<User> deleteUser(Integer id) {
+    public String deleteUser(Integer id) {
         Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()) {
-            return Optional.empty(); // No se encontró el usuario, devolvemos Optional.empty()
-        }
+
         User userDelete = user.get();
         try {
-            userRepository.delete(userDelete);
-            return user;
+            userDelete.setIsActive(false);
+            userRepository.save(userDelete);
+            return "Usuario eliminado correctamente";
         } catch (Exception e) {
             e.printStackTrace();
             throw new UserDeleteException("Error al eliminar el usuario con ID: " + id, e);
@@ -199,13 +203,18 @@ public class UserService implements IUserService {
 
     @Override
     public AuthResponse registerUser(RegisterRequest request) {
+        Province province = provinceService.getProvinceById(request.getProvinceId());
+        City city = cityService.getCityById(request.getCityId());
+
         User user = new User();
         user.setEmail(request.getEmail());
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.valueOf(String.valueOf(request.getRole())));
-        user.setCreateAt(LocalDateTime.now());
+        user.setProvince(province);
+        user.setCity(city);
+        user.setIsActive(true);
         userRepository.save(user);
         String token = jwtService.getToken(user);
         return AuthResponse.builder()
@@ -223,6 +232,21 @@ public class UserService implements IUserService {
                 "",
                 userDetails.getAuthorities()
         );
+    }
+
+    @Override
+    public List<UserResponseDTO> listAllActives() {
+        List<User> userList = userRepository.findAllNotDeleted();
+        if(!userList.isEmpty()){
+            List<UserResponseDTO> listUsersDto = new ArrayList<>();
+            userList.forEach(user -> {
+                UserResponseDTO userResponseDTO = new UserResponseDTO(user);
+                listUsersDto.add(userResponseDTO);
+            });
+            return listUsersDto;
+        }else{
+            throw new RuntimeException("No hay usuarios activos registrados");
+        }
     }
 
 }

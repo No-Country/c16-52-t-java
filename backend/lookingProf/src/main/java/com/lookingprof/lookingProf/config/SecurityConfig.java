@@ -33,7 +33,7 @@ public class SecurityConfig {
     @Autowired
     JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Value("${frontend}")
+    @Value("${frontendUrl}")
     private String frontendUrl;
 
     @Bean
@@ -43,7 +43,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                     auth
-                            .requestMatchers(HttpMethod.GET, "user/").permitAll()
+                            .requestMatchers("/auth/**", "/user/province", "/user/city", "/user/profession", "/user/qualification/{qualification}").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/user/{id}").authenticated()
+                            .requestMatchers(HttpMethod.GET, "/user/firstName").authenticated()
                             .anyRequest().permitAll();
                 })
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))

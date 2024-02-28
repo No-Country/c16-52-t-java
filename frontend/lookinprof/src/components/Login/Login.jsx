@@ -46,7 +46,6 @@ const Login = () => {
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
-
   const validateEmail = (email) => {
     if (!email) {
       setEmailError('El correo electrónico es requerido');
@@ -78,11 +77,8 @@ const Login = () => {
     } catch (error) {
       if (error.response && error.response.status === 404) {
         setEmailError('El correo electrónico no está registrado.');
-        return false;
-      } else {
-        alert('Ocurrió un problema al verificar el correo electrónico.');
-        return false;
-      }
+        return true;
+      } 
     }
   };
 
@@ -100,7 +96,6 @@ const Login = () => {
     if (!emailExistsCheck) {
       return;
     }
-
     try {
       const responseData = await axios.post('http://localhost:8080/auth/login', { email, password });
       const token = responseData.data.token;

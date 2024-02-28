@@ -2,7 +2,6 @@ package com.lookingprof.lookingProf.Auth;
 
 import com.lookingprof.lookingProf.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

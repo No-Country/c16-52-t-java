@@ -38,7 +38,7 @@ public class ProvinceController {
         return "Deleted Province";
     }
 
-    @PutMapping
+    @PutMapping("/edit")
     public Province editProvince (@RequestBody Province province){
         provincesService.editProvince(province);
         return provincesService.getProvinceById(province.getIdProvince());

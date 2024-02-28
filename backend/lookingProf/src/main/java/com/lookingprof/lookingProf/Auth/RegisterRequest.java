@@ -21,6 +21,7 @@ public class RegisterRequest {
     String password;
     @Enumerated(EnumType.STRING)
     private Role role;
-
+    private int cityId;
+    private int provinceId;
 
 }
