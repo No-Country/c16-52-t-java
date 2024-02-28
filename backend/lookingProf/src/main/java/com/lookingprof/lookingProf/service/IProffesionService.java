@@ -1,13 +1,15 @@
 package com.lookingprof.lookingProf.service;
 
+import com.lookingprof.lookingProf.dto.ProfessionResponseDTO;
 import com.lookingprof.lookingProf.model.Profession;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IProffesionService {
 
     //get profession
-    public List<Profession> getAllProfessions();
+    public Optional<List<ProfessionResponseDTO>> getAllProfessions();
 
     //get proffesion by id
     public Profession findProfessionById(Integer idProfession);
@@ -20,6 +22,8 @@ public interface IProffesionService {
 
     //edit profession
     public void editProfession (Profession profession);
+
+    public ProfessionResponseDTO getProfessionDTOById(Integer idProfession);
 
 
 }

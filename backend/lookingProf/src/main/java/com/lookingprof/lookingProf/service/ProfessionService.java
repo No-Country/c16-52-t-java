@@ -1,11 +1,14 @@
 package com.lookingprof.lookingProf.service;
 
+import com.lookingprof.lookingProf.dto.ProfessionResponseDTO;
 import com.lookingprof.lookingProf.model.Profession;
 import com.lookingprof.lookingProf.repository.IProfessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProfessionService implements IProffesionService {
@@ -14,8 +17,18 @@ public class ProfessionService implements IProffesionService {
     private IProfessionRepository professionRepository;
 
     @Override
-    public List<Profession> getAllProfessions() {
-        return professionRepository.findAll();
+    public Optional<List<ProfessionResponseDTO>> getAllProfessions() {
+        List<Profession> professionList = professionRepository.findAll();
+        List<ProfessionResponseDTO> listProfessionDTO = new ArrayList<>();
+        if(professionList.isEmpty()){
+            return Optional.empty();
+        } else {
+            professionList.forEach(profession -> {
+                ProfessionResponseDTO professionResponseDTO = new ProfessionResponseDTO(profession);
+                listProfessionDTO.add(professionResponseDTO);
+            });
+        }
+        return Optional.of(listProfessionDTO);
     }
 
     @Override
@@ -36,5 +49,11 @@ public class ProfessionService implements IProffesionService {
     @Override
     public void editProfession(Profession profession) {
         this.saveProfession(profession);
+    }
+
+    @Override
+    public ProfessionResponseDTO getProfessionDTOById(Integer idProfession) {
+        ProfessionResponseDTO professionResponseDTO = new ProfessionResponseDTO(professionRepository.findById(idProfession).get());
+        return professionResponseDTO;
     }
 }

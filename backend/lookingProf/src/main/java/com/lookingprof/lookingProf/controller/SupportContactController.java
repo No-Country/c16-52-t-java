@@ -36,11 +36,11 @@ public class SupportContactController {
         supportContactService.deleteSupportContact(idSupportContact);
         return "Delete SupportContact";
     }
-/*
+
     @PutMapping("/edit")
     public SupportContact editSupportContact(@RequestBody SupportContact supportContact){
         supportContactService.editSupportContact(supportContact);
         return supportContactService.findSupportContactById(supportContact.getIdSuportContact());
     }
-*/
+
 }

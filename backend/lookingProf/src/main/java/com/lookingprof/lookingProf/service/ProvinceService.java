@@ -1,11 +1,16 @@
 package com.lookingprof.lookingProf.service;
 
+import com.lookingprof.lookingProf.dto.CityDTO;
+import com.lookingprof.lookingProf.dto.ProvinceResponseDTO;
+import com.lookingprof.lookingProf.model.City;
 import com.lookingprof.lookingProf.model.Province;
 import com.lookingprof.lookingProf.repository.IProvincesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProvinceService implements IProvincesService {
@@ -14,8 +19,21 @@ public class ProvinceService implements IProvincesService {
     private IProvincesRepository provincesRepository;
 
     @Override
-    public List<Province> getAllProvinces() {
-        return provincesRepository.findAll();
+    public Optional<List<ProvinceResponseDTO>> getAllProvinces() {
+
+        List<Province> provinceList = provincesRepository.findAll();
+        List<ProvinceResponseDTO> listProvinceDto = new ArrayList<>();
+        if(provinceList.isEmpty()){
+            return Optional.empty();
+        } else {
+
+            provinceList.forEach (province -> {
+                ProvinceResponseDTO provinceDTO = new ProvinceResponseDTO(province);
+                listProvinceDto.add(provinceDTO);
+            } );
+        }
+        return Optional.of(listProvinceDto);
+
     }
 
     @Override
@@ -24,17 +42,8 @@ public class ProvinceService implements IProvincesService {
     }
 
     @Override
-    public void saveProvince(Province provinces) {
-        provincesRepository.save(provinces);
-    }
-
-    @Override
-    public void deleteProvince(Integer idProvince) {
-        provincesRepository.deleteById(idProvince);
-    }
-
-    @Override
-    public void editProvince(Province provinces) {
-        this.saveProvince(provinces);
+    public ProvinceResponseDTO getProvinceDtoById(Integer idProvince) {
+        ProvinceResponseDTO provinceResponseDTO = new ProvinceResponseDTO(provincesRepository.findById(idProvince).get());
+        return provinceResponseDTO;
     }
 }

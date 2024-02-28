@@ -1,13 +1,11 @@
 package com.lookingprof.lookingProf.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -23,8 +21,12 @@ public class Publication {
     private String title;
 
     private String profession;
-
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime updatedAt;
 }

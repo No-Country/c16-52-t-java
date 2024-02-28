@@ -1,11 +1,15 @@
 package com.lookingprof.lookingProf.controller;
 
+import com.lookingprof.lookingProf.dto.ProfessionResponseDTO;
 import com.lookingprof.lookingProf.model.Profession;
 import com.lookingprof.lookingProf.service.IProffesionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/profession")
@@ -16,14 +20,20 @@ public class ProfessionController {
 
     //get all professionals
     @GetMapping("/get")
-    public List<Profession> getAllProfessionals(){
-        return proffesionService.getAllProfessions();
+    public ResponseEntity<?> getAllProfessionals(){
+        Optional<List<ProfessionResponseDTO>> listOptional = proffesionService.getAllProfessions();
+        if(listOptional.isPresent()){
+            return ResponseEntity.ok(listOptional.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron profesiones");
+        }
     }
 
     //find professional by id
     @GetMapping("/get/{idProfession}")
-    public Profession findProfession(@PathVariable Integer idProfession){
-        return proffesionService.findProfessionById(idProfession);
+    public ProfessionResponseDTO findProfession(@PathVariable Integer idProfession){
+        ProfessionResponseDTO professionResponseDTO = proffesionService.getProfessionDTOById(idProfession);
+        return professionResponseDTO;
     }
     //create profession
     @PostMapping("/create")
