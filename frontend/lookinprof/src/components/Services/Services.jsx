@@ -1,16 +1,20 @@
-import React, { useState, useMemo } from 'react';
-import Cards from '../../UI/cards/Cards';
-import { servicesData } from '../../utils';
-import { Button } from '@mui/material';
-import { RiStarSFill, RiStarSLine } from "react-icons/ri";
-import ServiciosImages from '../../assets/ServiciosImages.svg';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { useNavigate } from 'react-router-dom';
-import { IoMdArrowRoundUp, IoMdArrowRoundDown } from "react-icons/io";
-import SelectProvince from '../../UI/SelectProvince';
+
+  import React, { useState, useMemo } from 'react';
+  import Cards from '../../UI/cards/Cards';
+  import { servicesData } from '../../utils';
+  import { Button } from '@mui/material';
+  import { RiStarSFill, RiStarSLine } from "react-icons/ri";
+  import mountain from "../../assets/montain.png";
+  import imageServices from "../../assets/imageServices.svg";
+  import InputLabel from '@mui/material/InputLabel';
+  import MenuItem from '@mui/material/MenuItem';
+  import FormControl from '@mui/material/FormControl';
+  import Select from '@mui/material/Select';
+  import { useNavigate } from 'react-router-dom';
+  import { IoMdArrowRoundUp, IoMdArrowRoundDown } from "react-icons/io";
+  import ServiciosImages from '../../assets/ServiciosImages.svg';
+  import SelectProvince from '../../UI/SelectProvince';
+
 
 const Services = () => {
     const [profesion, setProfesion] = useState('');
@@ -74,51 +78,55 @@ const Services = () => {
     const hasProfessionals = sortedServicesData.length > 0;
     console.log({provincia})
     return (
-        <section className='p-10 flex flex-col justify-center items-center'>
-            <div className='flex flex-row items-center justify-center w-[1100px]'>
-                <img src={ServiciosImages} alt="" className='w-[400px] h-[400px]' />
-                <div className='flex flex-col items-start justify-center gap-y-10'>
-                    <h2 className='lg:mt-4 text-3xl text-[#004466] font-black w-[350px]'>Encuentra a los mejores profesionales cerca de ti</h2>
-                    <h5 className='text-[#223139] text-xl font-bold'>Filtrar profesionales por:</h5>
-                    <div className='flex flex-col gap-3'>
-                        <FormControl className='w-[240px] text-[#004466]'>
-                            <InputLabel id="profesion-select-label">Profesión</InputLabel>
-                            <Select
-                                labelId="profesion-select-label"
-                                id="profesion-select-small"
-                                value={profesion}
-                                label="Profesión"
-                                onChange={handleProfessionChange}
-                            >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                {uniqueProfessions.map((prof, index) => (
-                                    <MenuItem key={index} value={prof}>{prof}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <div>
-                            <SelectProvince onProvinciaChange={handleProvinciaChange} />
-                        </div>
-                        <FormControl className='w-[240px] text-[#004466]'>
-                            <InputLabel id="stars-select-label">Stars</InputLabel>
-                            <Select
-                                labelId="stars-select-label"
-                                id="stars-select-small"
-                                value={stars}
-                                label="Stars"
-                                onChange={handleStarsChange}
-                            >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                {uniqueStars.map((star, index) => (
-                                    <MenuItem key={index} value={star}>{star}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-
+      <section className='p-10 flex flex-col justify-center items-center'>
+        <div className='flex flex-row items-center justify-center gap-[20px]'>
+        
+        <img
+        src={imageServices}
+        alt="manSettings"
+        className=""
+        style={{ height:500}} 
+      />
+          
+          <div className='flex flex-col items-start justify-center gap-y-10 '>
+            <h2 className='lg:mt-4 text-2xl text-[#004466] font-black w-[350px] '>Encuentra a los mejores profesionales cerca de ti</h2>
+            <h5 className='text-[#223139] text-xl font-bold'>Filtrar profesionales por:</h5>
+            <div className='flex flex-col gap-6'>
+              <FormControl className='w-[240px] text-[#004466]'>
+                <InputLabel id="profesion-select-label">Profesión</InputLabel>
+                <Select
+                  labelId="profesion-select-label"
+                  id="profesion-select-small"
+                  value={profesion}
+                  label="Profesión"
+                  onChange={handleProfessionChange}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {uniqueProfessions.map((prof, index) => (
+                    <MenuItem key={index} value={prof}>{prof}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl className='w-[240px] text-[#004466]'>
+                <InputLabel id="provincia-select-label">Provincia</InputLabel>
+                <Select
+                  labelId="provincia-select-label"
+                  id="provincia-select-small"
+                  value={provincia}
+                  label="Provincia"
+                  onChange={handleProvinciaChange}
+                  disabled={!profesion}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {uniqueProvincias.map((loc, index) => (
+                    <MenuItem key={index} value={loc}>{loc}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
                     </div>
                 </div>
             </div>
