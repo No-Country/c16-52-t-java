@@ -61,7 +61,6 @@ public class CommentController {
         }
     }
 
-
    @PostMapping()
     public ResponseEntity<CommentDTOResponse> createComment(@RequestBody CommentDTORequest dto){
         try{

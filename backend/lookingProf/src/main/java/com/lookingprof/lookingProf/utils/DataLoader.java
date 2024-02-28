@@ -1,9 +1,6 @@
 package com.lookingprof.lookingProf.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lookingprof.lookingProf.jwt.JwtService;
 import com.lookingprof.lookingProf.model.City;
 import com.lookingprof.lookingProf.model.Enum.Role;
 import com.lookingprof.lookingProf.model.Profession;
@@ -84,7 +81,7 @@ public class DataLoader implements CommandLineRunner {
             professionRepository.saveAll(professionList);
         }
 
-        if (userRepository.count() == 0){
+        if (userRepository.count() == 0) {
             List<Profession> professionList = professionRepository.findAll();
 
             Optional<Province> province = provincesRepository.findById(12);
@@ -146,7 +143,7 @@ public class DataLoader implements CommandLineRunner {
             List<Profession> professions = professionRepository.findAll();
             List<City> cities = cityRepository.findAll();
 
-            for (int i = 0; i < mapList.size(); i++){
+            for (int i = 0; i < mapList.size(); i++) {
                 City city3 = new City();
                 city3.setNameCity((String) mapList.get(i).get("city"));
                 city3.setProvince(provinces.get(i));

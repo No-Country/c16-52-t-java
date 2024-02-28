@@ -45,6 +45,7 @@ public class PublicationController {
     }
 
 
+    //modificar el metodo edit y pasae el id por la url
     @PutMapping("/edit")
     public Publication editPublication(@RequestBody Publication publication){
         publicationService.editPublication(publication);

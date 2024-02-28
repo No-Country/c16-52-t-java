@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class SupportContactService {
+public class SupportContactService implements ISupportContactService {
     private final ISupportContactRepository supportContactRepository;
 
 

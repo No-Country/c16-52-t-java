@@ -15,10 +15,11 @@ public class UserRequestDTO {
 //aca van los campos para editar y crear el usuario
     private String lastName;
     private String firstName;
-    private String province;
+    private int province;
     private String city;
+    private String phone;
     private Integer qualification;
-    private String profession;
+    private int profession;
     @Enumerated(EnumType.STRING)
     private Role role;
     private String description;

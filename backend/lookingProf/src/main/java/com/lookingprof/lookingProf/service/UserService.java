@@ -10,8 +10,10 @@ import com.lookingprof.lookingProf.exceptions.UserUpdateException;
 import com.lookingprof.lookingProf.jwt.JwtService;
 import com.lookingprof.lookingProf.model.City;
 import com.lookingprof.lookingProf.model.Enum.Role;
+import com.lookingprof.lookingProf.model.Profession;
 import com.lookingprof.lookingProf.model.Province;
 import com.lookingprof.lookingProf.model.User;
+import com.lookingprof.lookingProf.repository.ICityRepository;
 import com.lookingprof.lookingProf.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,7 +47,13 @@ public class UserService implements IUserService {
     CityService cityService;
 
     @Autowired
+    ICityRepository cityRepository;
+
+    @Autowired
     ProvinceService provinceService;
+
+    @Autowired
+    ProfessionService professionService;
 
     @Override
     @Transactional(readOnly = true)
@@ -114,17 +122,32 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Optional<UserResponseDTO> updateUser(Integer id, UserResponseDTO userUpdate) {
+    public Optional<UserResponseDTO> updateUser(Integer id, UserRequestDTO userUpdate) {
+        City city = cityService.getCityByName(userUpdate.getCity());
+        Province province = provinceService.getProvinceById(userUpdate.getProvince());
+        Profession profession = professionService.findProfessionById(userUpdate.getProfession());
+
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty()){
             return Optional.empty();
         }
         User user = userOptional.get();
         try {
-            user.setFirstName(userUpdate.getFirstName());
-            user.setLastName(userUpdate.getLastName());
             user.setPhone(userUpdate.getPhone());
-            user.setPhone(userUpdate.getEmail());
+            user.setProvince(province);
+            user.setProfession(profession);
+            user.setDescription(userUpdate.getDescription());
+
+            if (city != null){
+                user.setCity(city);
+            } else {
+                City city1 = new City();
+                city1.setNameCity(userUpdate.getCity());
+                city1.setProvince(province);
+                cityRepository.save(city1);
+
+                user.setCity(city1);
+            }
             userRepository.save(user);
             return Optional.of(new UserResponseDTO(user));
         } catch (Exception e) {

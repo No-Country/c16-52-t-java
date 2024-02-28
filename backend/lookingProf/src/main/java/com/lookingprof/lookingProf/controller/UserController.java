@@ -1,5 +1,6 @@
 package com.lookingprof.lookingProf.controller;
 
+import com.lookingprof.lookingProf.dto.UserRequestDTO;
 import com.lookingprof.lookingProf.dto.UserResponseDTO;
 import com.lookingprof.lookingProf.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody UserResponseDTO userUpdate) {
+    public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody UserRequestDTO userUpdate) {
         Optional<UserResponseDTO> updatedUser = userService.updateUser(id, userUpdate);
         if (updatedUser.isPresent()) {
             return ResponseEntity.ok(updatedUser.get());

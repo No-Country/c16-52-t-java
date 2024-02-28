@@ -65,6 +65,7 @@ public class User implements UserDetails {
 
     private Integer qualification;
     private String imageUrl;
+
     @ManyToOne
     @JoinColumn(name = "idProfession")
     private Profession profession;

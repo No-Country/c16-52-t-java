@@ -16,13 +16,15 @@ public class City {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int idCity;
+
+    //@Column(unique = true)
     private String nameCity;
+
     @ManyToOne
     @JoinColumn(name="fk_province")
     private Province province;
 
     @OneToMany(mappedBy = "city")
-    private List<User> users;
-
+    List<User> users;
 
 }

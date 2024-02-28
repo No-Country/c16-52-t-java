@@ -1,5 +1,6 @@
 package com.lookingprof.lookingProf.dto;
 
+import com.lookingprof.lookingProf.model.Enum.Role;
 import com.lookingprof.lookingProf.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,10 +23,12 @@ public class UserResponseDTO {
     private String lastName;
     private String imageUrl;
     private String phone;
-    //private String  profession;
-    //private String province;
-    //private String city;
-
+    private String profession;
+    private String province;
+    private String city;
+    private String country;
+    private Role role;
+    private String description;
 
     public UserResponseDTO(User user){
         this.idUser=user.getIdUser();
@@ -36,9 +39,11 @@ public class UserResponseDTO {
         this.lastName= user.getLastName();
         this.imageUrl= user.getImageUrl();
         this.phone=user.getPhone();
-        //this.profession= user.getProfession().getNameProfession();
-        //this.province= user.getProvince().getNameProvince();
-        //this.city= user.getCity().getNameCity();
+        this.profession = user.getProfession() != null ? user.getProfession().getNameProfession() : null;
+        this.province = user.getProvince() != null ? user.getProvince().getNameProvince() : null;
+        this.city = user.getCity() != null ? user.getCity().getNameCity() : null;
+        this.description = user.getDescription() != null? user.getDescription() : null;
+        this.country = user.getCountry();
+        this.role = user.getRole();
     }
-
 }

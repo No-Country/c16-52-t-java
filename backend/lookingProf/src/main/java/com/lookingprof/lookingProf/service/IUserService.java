@@ -3,6 +3,7 @@ package com.lookingprof.lookingProf.service;
 import com.lookingprof.lookingProf.Auth.AuthResponse;
 import com.lookingprof.lookingProf.Auth.LoginRequest;
 import com.lookingprof.lookingProf.Auth.RegisterRequest;
+import com.lookingprof.lookingProf.dto.UserRequestDTO;
 import com.lookingprof.lookingProf.dto.UserResponseDTO;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +16,7 @@ public interface IUserService extends UserDetailsService {
     public Optional<List<UserResponseDTO>> listAll();
     public Optional<UserResponseDTO> findById(Integer id);
     public String deleteUser(Integer id);
-    public Optional<UserResponseDTO> updateUser(Integer id, UserResponseDTO userDTO);
+    public Optional<UserResponseDTO> updateUser(Integer id, UserRequestDTO userDTO);
     public Optional<List<UserResponseDTO>> findByFirstname(String firstName);
     public Optional<UserResponseDTO> findByEmail(String email);
 

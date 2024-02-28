@@ -1,24 +1,20 @@
 package com.lookingprof.lookingProf.service;
 
+import com.lookingprof.lookingProf.dto.ProvinceResponseDTO;
 import com.lookingprof.lookingProf.model.Province;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IProvincesService {
 
     //get provinces
-    public List<Province> getAllProvinces();
+    public Optional<List<ProvinceResponseDTO>> getAllProvinces();
 
     //get province by id
     public Province getProvinceById(Integer idProvince);
 
-    //create province
-    public void saveProvince(Province provinces);
-
-    //delete province
-    public void deleteProvince(Integer idProvince);
-
-    //edit province
-    public void editProvince(Province provinces);
+    //get provinceDTO by ID
+    public ProvinceResponseDTO getProvinceDtoById(Integer idProvince);
 
 }

@@ -22,6 +22,7 @@ public class Province {
     private String nameProvince;
 
     @OneToMany(mappedBy = "province")
-    private List<User> users;
+    List<User> users;
+
 
 }
