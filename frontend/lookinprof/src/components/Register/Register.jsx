@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import deliveryMan from "../../assets/deliveryMan.png";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "../../redux/slices/userSlice";
+import mountain from "../../assets/montain.png";
+import manWorking from "../../assets/manWorking.svg";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -10,79 +13,205 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
-import FormGroup from "@mui/material/FormGroup";
+import FormHelperText from "@mui/material/FormHelperText"; // Import FormHelperText
+import { Link, useNavigate } from "react-router-dom";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+import axios from "axios";
 
 const Register = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: "",
+    firstName: "",
+    lastName: "",
+    password: "",
+    role: "USER",
+    name_province:"Santa Fe",
+    city:"Santa Fe"
+  });
+  const [formErrors, setFormErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    if (formErrors[name]) {
+      setFormErrors({ ...formErrors, [name]: "" });
+    }
+  };
 
-  const handleMouseDownPassword = (event) => {
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  
+  const handleMouseDownPassword = (event) => event.preventDefault();
+
+  const validateEmail = (email) => 
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email.toLowerCase());
+
+  const checkEmailExists = async (email) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/user/email?email=${email}`);
+      if (response.data.email) {
+        setFormErrors(prevErrors => ({ ...prevErrors, email: 'El correo electrónico ya está registrado.' }));
+        return true; // Correo ya existe
+      }
+      return
+    } catch (error) {
+      console.error('Error al verificar el correo electrónico', error);
+    }
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    let isValid = true;
+
+    if (!formData.email) {
+      errors.email = "El correo electrónico es requerido";
+      isValid = false;
+    } else if (!validateEmail(formData.email)) {
+      errors.email = "El formato del correo electrónico no es correcto";
+      isValid = false;
+    }
+
+    if (!formData.firstName.trim()) {
+      errors.firstName = "El nombre es requerido";
+      isValid = false;
+    }
+
+    if (!formData.lastName.trim()) {
+      errors.lastName = "El apellido es requerido";
+      isValid = false;
+    }
+
+    if (!formData.password) {
+      errors.password = "La contraseña es requerida";
+      isValid = false;
+    } else if (formData.password.length < 8) {
+      errors.password = "La contraseña debe tener al menos 8 caracteres";
+      isValid = false;
+    }
+
+    setFormErrors(errors);
+    return isValid;
+  };
+
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-  };
 
-  const [usuarioChecked, setUsuarioChecked] = useState(false);
-  const [profesionalChecked, setProfesionalChecked] = useState(false);
+    if (!validateForm()) {
+      return;
+    }
 
-  const handleUsuarioChange = () => {
-    setUsuarioChecked(true);
-    setProfesionalChecked(false);
-  };
+    const doesEmailExist = await checkEmailExists(formData.email);
+    if(doesEmailExist) {
+      return; // No continúa si el correo ya existe
+    }
 
-  const handleProfesionalChange = () => {
-    setUsuarioChecked(false);
-    setProfesionalChecked(true);
+    try {
+      const response = await axios.post('http://localhost:8080/auth/register', formData);
+      const token = response.data.token;
+      localStorage.setItem('jwt', token);
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      dispatch(setCurrentUser(payload));
+      alert(`Gracias ${payload.firstName} por registrarte`);
+      navigate('/');
+    } catch (error) {
+      console.error("Error during registration", error);
+    }
   };
   return (
-    <div className="flex justify-center">
-      <div className="shadow-2xl rounded-3xl shadow-gray-400 bg-slate-300 w-1/3">
-        <img src={deliveryMan} alt="Man delivery"></img>
-      </div>
-     
-        <div className="shadow-2xl rounded-3xl shadow-gray-400 px-20 py-20 h-full flex flex-col justify-between w-1/3">
+    <div
+      className=" flex flex-col-reverse lg:relative h-screen lg:justify-center items-center"
+      style={{
+        backgroundImage: `url(${mountain})`,
+        backgroundSize: "cover",
+      }}
+    >
+      <img
+        src={manWorking}
+        alt="manWorking"
+        className="absolute left-0 p-[43px] hidden lg:block"
+      />
+      
+        <div className="flex flex-col lg:justify-center items-center relative sm:relative lg:rounded-3xl p-10 z-20  bg-white lg:bottom-[-1px] justify-center">
           <Typography variant="h3" gutterBottom>
             Registrarse
           </Typography>
+          <form
+            className="flex flex-col align-items: center justify-content: center space-y-2"
+            onSubmit={handleFormSubmit}
+          >
+            <FormControl>
+              <RadioGroup
+                row
+                aria-labelledby="demo-row-radio-buttons-group-label"
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+              >
+                <FormControlLabel
+                  value="USER"
+                  control={<Radio />}
+                  label="Usuario"
+                />
+                <FormControlLabel
+                  value="PROFESSIONAL"
+                  control={<Radio />}
+                  label="Professional"
+                />
+              </RadioGroup>
+            </FormControl>
 
-          <form className="flex flex-col align-items: center justify-content: center space-y-5">
-            {/* <FormGroup>
-              <FormControlLabel
-                control={<Checkbox checked={usuarioChecked} onChange={handleUsuarioChange} />}
-                label="Usuario"
-              />
-              <FormControlLabel
-                control={<Checkbox checked={profesionalChecked} onChange={handleProfesionalChange} />}
-                label="Profesional"
-              />
-            </FormGroup> */}
-
-            {/* <Button variant="outlined" startIcon={<DeleteIcon />}>
-  Delete
-</Button>
-<Button variant="contained" endIcon={<SendIcon />}>
-  Send
-</Button> */}
+            {/* Email Field */}
             <TextField
+              name="email"
               label="Correo Electrónico"
               placeholder="Correo Electrónico"
               variant="outlined"
+              size="small"
+              onChange={handleChange}
+              error={!!formErrors.email}
+              helperText={formErrors.email ? !formErrors.email : ""}
             />
+            <FormHelperText error className="text-xs">
+              {formErrors.email}
+            </FormHelperText>
 
+            {/* First Name Field */}
             <TextField
-              label="Nombre y Apellido"
-              required
-              placeholder="Nombre y Apellido"
+              name="firstName"
+              label="Nombres"
+              placeholder="Nombres"
               variant="outlined"
+              size="small"
+              onChange={handleChange}
+              error={!!formErrors.firstName}
+              helperText={formErrors.firstName || ''}
+            />
+            <FormHelperText error className="text-xs">
+              {formErrors.firstName}
+            </FormHelperText>
+
+            {/* Last Name Field */}
+            <TextField
+              name="lastName"
+              label="Apellidos"
+              placeholder="Apellidos"
+              variant="outlined"
+              size="small"
+              onChange={handleChange}
+              error={!!formErrors.lastName}
+              helperText={formErrors.lastName || ''}
             />
 
             <FormControl variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-password">
-                Password
+              <InputLabel htmlFor="outlined-adornment-password" size="small">
+                Contraseña
               </InputLabel>
               <OutlinedInput
+                name="password"
                 id="outlined-adornment-password"
                 type={showPassword ? "text" : "password"}
                 endAdornment={
@@ -97,20 +226,28 @@ const Register = () => {
                     </IconButton>
                   </InputAdornment>
                 }
-                label="Password"
+                label="Contraseña"
+                onChange={handleChange}
+                error={!!formErrors.password}
               />
+              <FormHelperText error>{formErrors.password || ''}</FormHelperText>
             </FormControl>
 
-            <Button variant="contained" className="shadow-2xl">Registrarme</Button>
+            <Button variant="contained" className="shadow-2xl" type="submit">
+              Registrarme
+            </Button>
           </form>
-          <p className='pt-5'>
+
+          {/* Login Redirect */}
+          <Typography variant="body2" className="pt-5">
             Ya tienes una cuenta,{" "}
-            <Link to={`/login`} className="text-blue-700 blod font-semibold ">
-              click aquí.
+            <Link to="/login" className="text-blue-700 font-semibold">
+              haz clic aquí
             </Link>
-          </p>
-        </div>
-      
+            .
+          </Typography>
+       
+      </div>
     </div>
   );
 };
