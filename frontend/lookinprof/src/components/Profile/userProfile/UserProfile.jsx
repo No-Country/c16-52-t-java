@@ -21,6 +21,8 @@ const UserProfile = () => {
   const [city, setCity] = useState("");
   const [isProvinceSelected, setIsProvinceSelected] = useState(false);
   const [isCityEntered, setIsCityEntered] = useState(false);
+  const[isCityValid, setIsCityValid] = useState(false);
+
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -57,7 +59,11 @@ const UserProfile = () => {
     const enteredCity = event.target.value;
     setCity(enteredCity);
     setIsCityEntered(enteredCity.trim() !== "");
+    const isValid = /^[a-zA-Z\s]{3,25}$/.test(enteredCity);
+    setIsCityValid(isValid);
   };
+
+  
   const handleSaveChanges = () => {
     console.log("Provincia seleccionada:", selectedProvince);
     console.log("Ciudad ingresada:", city);
@@ -125,10 +131,11 @@ const UserProfile = () => {
                 id="demo-helper-text-misaligned"
                 label="Ciudad"
                 onChange={handleCityChange}
+                error={!isCityValid && isCityEntered}
               />
             </FormControl>
 
-            <Button variant="contained"  onClick={handleSaveChanges} disabled={!isProvinceSelected || !isCityEntered}>Guardar Cambios</Button>
+            <Button variant="contained"  onClick={handleSaveChanges} disabled={!isProvinceSelected || !isCityEntered || !isCityValid }>Guardar Cambios</Button>
           </form>
          
         </div>
