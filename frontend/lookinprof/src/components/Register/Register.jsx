@@ -123,7 +123,7 @@ const Register = () => {
   };
   return (
     <div
-      className=" flex flex-col-reverse lg:relative h-screen flex lg:justify-center items-center"
+      className=" flex flex-col-reverse lg:relative h-screen lg:justify-center items-center"
       style={{
         backgroundImage: `url(${mountain})`,
         backgroundSize: "cover",
@@ -157,7 +157,7 @@ const Register = () => {
                   label="Usuario"
                 />
                 <FormControlLabel
-                  value="professional"
+                  value="PROFESSIONAL"
                   control={<Radio />}
                   label="Professional"
                 />
