@@ -44,7 +44,7 @@ const Footer = () => {
           </ul>
         </div>
       </div>
-      <div className='text-sm text-white text-center mt-8'>
+      <div className='text-xs text-white text-center'>
         <p>Copyright @ 2024, LookingProf All rights reserved.</p>
       </div>
     </footer>

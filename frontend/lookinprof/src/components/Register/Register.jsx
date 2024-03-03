@@ -28,9 +28,7 @@ const Register = () => {
     firstName: "",
     lastName: "",
     password: "",
-    role: "USER",
-    name_province:"Santa Fe",
-    city:"Santa Fe"
+    role: "USER"
   });
   const [formErrors, setFormErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
@@ -49,19 +47,6 @@ const Register = () => {
 
   const validateEmail = (email) => 
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email.toLowerCase());
-
-  const checkEmailExists = async (email) => {
-    try {
-      const response = await axios.get(`http://localhost:8080/user/email?email=${email}`);
-      if (response.data.email) {
-        setFormErrors(prevErrors => ({ ...prevErrors, email: 'El correo electrónico ya está registrado.' }));
-        return true; // Correo ya existe
-      }
-      return
-    } catch (error) {
-      console.error('Error al verificar el correo electrónico', error);
-    }
-  };
 
   const validateForm = () => {
     const errors = {};
@@ -104,11 +89,6 @@ const Register = () => {
       return;
     }
 
-    const doesEmailExist = await checkEmailExists(formData.email);
-    if(doesEmailExist) {
-      return; // No continúa si el correo ya existe
-    }
-
     try {
       const response = await axios.post('http://localhost:8080/auth/register', formData);
       const token = response.data.token;
@@ -118,7 +98,7 @@ const Register = () => {
       alert(`Gracias ${payload.firstName} por registrarte`);
       navigate('/');
     } catch (error) {
-      console.error("Error during registration", error);
+      alert("El correo ingresado ya esta registrado")
     }
   };
   return (

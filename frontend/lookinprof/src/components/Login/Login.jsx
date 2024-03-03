@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import mountain from "../../assets/montain.png";
-import manSettings from "../../assets/manSettings.svg";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -25,6 +24,7 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -70,17 +70,7 @@ const Login = () => {
     return true;
   };
 
-  const emailExists = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8080/user/email?email=${email}`);
-      return response.status === 200;
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        setEmailError('El correo electrónico no está registrado.');
-        return true;
-      } 
-    }
-  };
+ 
 
   const signIn = async (e) => {
     e.preventDefault();
@@ -92,20 +82,18 @@ const Login = () => {
       return;
     }
 
-    const emailExistsCheck = await emailExists();
-    if (!emailExistsCheck) {
-      return;
-    }
+   
     try {
       const responseData = await axios.post('http://localhost:8080/auth/login', { email, password });
       const token = responseData.data.token;
       localStorage.setItem('jwt', token);
-      const [header, payload, signature] = token.split('.');
+      const [ payload ] = token.split('.');
       const decodedPayload = JSON.parse(atob(payload));
       dispatch(setCurrentUser(decodedPayload));
       alert(`Hola de nuevo!! ${decodedPayload.firstName}`);
       navigate('/');
     } catch (error) {
+      console.log(error)
       if (error.response && error.response.status === 401) {
         setPasswordError('La contraseña es incorrecta.');
       } else {
@@ -117,7 +105,7 @@ const Login = () => {
  
   
   return (
-    <div className=" flex flex-col-reverse lg:relative h-screen flex lg:justify-center items-center" style={{
+    <div className=" flex flex-col-reverse lg:relative h-screen lg:justify-center items-center" style={{
       backgroundImage: `url(${mountain})`,
       backgroundSize: "cover",
     }}>

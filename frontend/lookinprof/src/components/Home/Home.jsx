@@ -1,22 +1,40 @@
 import { Button } from '@mui/material';
 import React from 'react';
 import { FaStar } from "react-icons/fa";
-import ImageHome from './../../assets/Group.svg';
 import bgCard from './../../assets/bgCardHome.svg';
 import ImageHome2 from './../../assets/ImageHomeSection2.svg';
 import Cards from '../../UI/cards/Cards';
-import { servicesData } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import { RiStarSFill, RiStarSLine } from "react-icons/ri";
 import { useSelector } from 'react-redux';
-import { getUser } from '../../axios/user';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 const Home = () => {
   const { currentUser } = useSelector(({user}) => user);
+  const [servicesData, setServicesData] = React.useState([]);
   const navigate = useNavigate();
-  const sortedServicesData = servicesData.sort((a, b) => b.starts - a.starts);
-  const servicesHome = sortedServicesData.slice(0, 6);
+ // const sortedServicesData = servicesData.sort((a, b) => b.starts - a.starts);
+  const professionals = servicesData.filter((item) => item.role === 'PROFESSIONAL');
+  const servicesHome = professionals.slice(0, 6);
 
+  useEffect(() => {
+    let didCancel = false; 
+    const fetchServicesData = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/user/all');
+            if (!didCancel) { 
+                setServicesData(response.data);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    fetchServicesData();
+    return () => {
+        didCancel = true; 
+    };
+}, []);
   const handleClickContact = () => {
     navigate('/services');
   };
@@ -59,15 +77,15 @@ const Home = () => {
         <h3 className='text-[#004466] text-xl text-center p-4'>Nuestra selección de profesionales</h3>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-auto max-w-[1100px] min-w-[320px] p-2 justify-center'>
           {servicesHome.map((item) => (
-            <div key={item.id} className='m-2 border-[#004466] border-2 rounded-lg h-auto'>
+            <div key={item.idUser} className='p-10 m-10 border-[#004466] border-2  shadow-slate-400 shadow-xl rounded-lg h-auto'>
               <Cards className='flex flex-col items-center'>
                 <div>
-                  <img src={item.image} alt={item.title} className='w-full h-[200px] object-cover rounded-t-lg mb-4' />
+                  <img src={item.imageUrl} alt={item.title} className='w-full h-[200px] object-cover rounded-t-lg mb-4' />
                   <div className='pl-5'>
-                  <h4 className='font-semibold text-xl'>{item.name}</h4>
-                  <p className='text-sm'>{item.prof}</p>
-                  <span className='text-xs'>{item.city}</span>
-                  
+                  <h4 className='font-semibold text-xl'>{item.firstName}</h4>
+                  <p className='text-sm'>{item.profession}</p>
+                  <span className='text-xs'>{item.city}, {item.province}</span>
+                  {/*
                   <div className='flex flex-row gap-1 items-center'>
                     {item.starts}{[...Array(Math.floor(item.starts))].map((_, i) => (
                       <RiStarSFill key={i} className='text-yellow-500' />
@@ -75,12 +93,12 @@ const Home = () => {
                     {item.starts % 1 !== 0 && (
                       <RiStarSLine className='text-yellow-500' />
                     )}
-                  </div>
+                    </div>*/}
                   </div>
                 </div>
                 
                 <div className='flex py-2'>
-                  <Button variant='contained' color='primary' onClick={() => handleClickCard(item.id)}>
+                  <Button variant='contained' color='primary' onClick={() => handleClickCard(item.idUser)}>
                     Contactar
                   </Button>
                 </div>

@@ -2,32 +2,41 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import UserProfile from './userProfile/UserProfile';
 import ServiceProfile from './serviceProfile/ServiceProfile';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import { setCurrentUser } from '../../redux/slices/userSlice';
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const [decodedPayload, setDecodedPayload] = useState(null);
+  const token = localStorage.getItem('jwt');
+  const { id } = useParams();  // Added parentheses to useParams
+
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('jwt');
-    if (token) {
+    const fetchData = async () => {
       try {
-        const [, payload] = token.split('.');
-        const _decodedPayload = JSON.parse(atob(payload));
-        dispatch(setCurrentUser(_decodedPayload));
-        setDecodedPayload(_decodedPayload);
+        const response = await axios.get(`http://localhost:8080/user/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          },
+        });
+        setUserData(response.data);
       } catch (error) {
-        console.error('Failed to decode or parse the JWT:', error);
+        console.error("Error fetching user data:", error);
       }
-    }
-  }, [dispatch]);
-  
-  // Conditional logic to check if the user has the "USER" role.
-  const hasUserRole = decodedPayload?.role?.[0]?.authority === "USER";
+    };
+    fetchData();
+  }, [id, token]);
+
+  const hasUserRole = userData?.role === "USER"; 
 
   return (
     <div className='flex flex-col items-center justify-center'>
-      {decodedPayload && <h1>Welcome {decodedPayload.firstName}</h1>}
       {hasUserRole ? <UserProfile /> : <ServiceProfile />}
     </div>
   );
