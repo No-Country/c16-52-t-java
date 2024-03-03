@@ -157,7 +157,7 @@ const Register = () => {
                   label="Usuario"
                 />
                 <FormControlLabel
-                  value="professional"
+                  value="PROFESSIONAL"
                   control={<Radio />}
                   label="Professional"
                 />
