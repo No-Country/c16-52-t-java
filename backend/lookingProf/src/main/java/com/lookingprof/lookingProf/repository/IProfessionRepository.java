@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IProfessionRepository extends JpaRepository<Profession, Integer> {
+    Profession findByNameProfession(String profession);
+
 }

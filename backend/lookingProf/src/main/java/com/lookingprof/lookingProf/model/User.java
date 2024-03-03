@@ -30,7 +30,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class User implements UserDetails {
 
     @Id
@@ -127,4 +126,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

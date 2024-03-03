@@ -14,8 +14,9 @@ public class ImageService {
     //SETEO LA RUTA DONDE SE ALMACENARAN LAS IMAGENES DEL PERFIL DEL USUARIO
     private static final String ABSOLUTE_PATH = "C://Users//54375//Documents//LookingProfImgs";
 
-    private String copyProfileImg(MultipartFile image){
+    public String copyProfileImg(String oldImageUrl, MultipartFile image){
         try{
+            Files.delete(Paths.get(ABSOLUTE_PATH , oldImageUrl).toAbsolutePath());
             String photoName = image.getOriginalFilename();
             Path photoPath = Paths.get(ABSOLUTE_PATH, photoName).toAbsolutePath();
             Files.copy(image.getInputStream(), photoPath, StandardCopyOption.REPLACE_EXISTING);

@@ -46,4 +46,9 @@ public class ProvinceService implements IProvincesService {
         ProvinceResponseDTO provinceResponseDTO = new ProvinceResponseDTO(provincesRepository.findById(idProvince).get());
         return provinceResponseDTO;
     }
+
+    @Override
+    public Province getProvinceByName(String province) {
+        return provincesRepository.findByNameProvince(province);
+    }
 }

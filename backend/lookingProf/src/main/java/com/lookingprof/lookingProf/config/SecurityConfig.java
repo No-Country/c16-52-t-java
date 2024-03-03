@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                     auth
-                            .requestMatchers("/auth/**", "user/all", "/user/province", "/user/city", "/user/profession", "/user/qualification/{qualification}").permitAll()
+                            .requestMatchers("/auth/**", "/user/province", "/user/city", "/user/profession","/user/email", "/user/qualification/{qualification}").permitAll()
                             .requestMatchers(HttpMethod.GET, "/user/{id}").authenticated()
                             .requestMatchers(HttpMethod.GET, "/user/firstName").authenticated()
                             .anyRequest().permitAll();
@@ -60,7 +60,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of(frontendUrl));
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.setAllowCredentials(true);

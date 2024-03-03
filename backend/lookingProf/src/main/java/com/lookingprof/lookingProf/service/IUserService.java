@@ -1,12 +1,13 @@
 package com.lookingprof.lookingProf.service;
 
-import com.lookingprof.lookingProf.Auth.AuthResponse;
-import com.lookingprof.lookingProf.Auth.LoginRequest;
-import com.lookingprof.lookingProf.Auth.RegisterRequest;
+import com.lookingprof.lookingProf.config.Auth.AuthResponse;
+import com.lookingprof.lookingProf.config.Auth.LoginRequest;
+import com.lookingprof.lookingProf.config.Auth.RegisterRequest;
 import com.lookingprof.lookingProf.dto.UserRequestDTO;
 import com.lookingprof.lookingProf.dto.UserResponseDTO;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,5 +30,6 @@ public interface IUserService extends UserDetailsService {
     public AuthResponse registerUser(RegisterRequest user);
     public UserDetails loadUserByUsername(String username);
     public List<UserResponseDTO> listAllActives();
+
 
 }
