@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import mountain from "../../assets/montain.png";
-import manSettings from "../../assets/manSettings.svg";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -88,7 +87,7 @@ const Login = () => {
       const responseData = await axios.post('http://localhost:8080/auth/login', { email, password });
       const token = responseData.data.token;
       localStorage.setItem('jwt', token);
-      const [header, payload, signature] = token.split('.');
+      const [ payload ] = token.split('.');
       const decodedPayload = JSON.parse(atob(payload));
       dispatch(setCurrentUser(decodedPayload));
       alert(`Hola de nuevo!! ${decodedPayload.firstName}`);
@@ -106,7 +105,7 @@ const Login = () => {
  
   
   return (
-    <div className=" flex flex-col-reverse lg:relative h-screen flex lg:justify-center items-center" style={{
+    <div className=" flex flex-col-reverse lg:relative h-screen lg:justify-center items-center" style={{
       backgroundImage: `url(${mountain})`,
       backgroundSize: "cover",
     }}>

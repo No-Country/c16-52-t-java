@@ -1,8 +1,6 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Cards from '../../UI/cards/Cards';
-import { servicesData } from '../../utils';
 import { Button } from '@mui/material';
-import { RiStarSFill, RiStarSLine } from "react-icons/ri";
 import ServiciosImages from '../../assets/ServiciosImages.svg';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -21,8 +19,7 @@ const Services = () => {
     const [filteredServicesData, setFilteredServicesData] = useState([]);
     const [servicesData, setServicesData] = useState([]);
     const [professions, setProfessions] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+  
     const navigate = useNavigate(); // Acceso a la función de navegación proporcionada por React Router
     useEffect(() => {
         const fetchData = async () => {
@@ -37,9 +34,9 @@ const Services = () => {
                 setFilteredServicesData(servicesResponse.data.filter(item => item.role === 'PROFESSIONAL'));
                 setProfessions(professionsResponse.data);
             } catch (error) {
-                setError(error);
+                console.log(error);
             }
-            setLoading(false);
+            
         };
 
         fetchData();
