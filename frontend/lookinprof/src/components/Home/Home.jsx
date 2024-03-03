@@ -9,7 +9,7 @@ import { servicesData } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import { RiStarSFill, RiStarSLine } from "react-icons/ri";
 import { useSelector } from 'react-redux';
-import { getUser } from '../../axios/axios';
+import { getUser } from '../../axios/user';
 
 const Home = () => {
   const { currentUser } = useSelector(({user}) => user);
