@@ -17,12 +17,10 @@ const UserProfile = () => {
 
   const [provinces, setProvinces] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState("");
-
   const [city, setCity] = useState("");
   const [isProvinceSelected, setIsProvinceSelected] = useState(false);
   const [isCityEntered, setIsCityEntered] = useState(false);
-  const[isCityValid, setIsCityValid] = useState(false);
-
+  const [isCityValid, setIsCityValid] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -63,12 +61,20 @@ const UserProfile = () => {
     setIsCityValid(isValid);
   };
 
-  
   const handleSaveChanges = () => {
-    console.log("Provincia seleccionada:", selectedProvince);
-    console.log("Ciudad ingresada:", city);
+    const userData = {
+      city: city,
+      province: selectedProvince,
+    };
+    axios
+      .put(`http://localhost:8080/user/${decodedPayload?.id}`, userData)
+      .then((response) => {
+        console.log("Datos guardados en la base de datos:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error al guardar los datos:", error);
+      });
   };
-
 
   return (
     <div className="flex justify-center m-10 ">
@@ -101,7 +107,9 @@ const UserProfile = () => {
           <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
             Lugar de residencia:
           </Typography>
-          <form style={{ display:'flex', flexDirection:'column', gap:'10px' }}>
+          <form
+            style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+          >
             <FormControl sx={{ m: 1, minWidth: 120 }}>
               <InputLabel id="provincia">Provincia</InputLabel>
               <Select
@@ -113,7 +121,7 @@ const UserProfile = () => {
                 {provinces.map((province) => (
                   <MenuItem
                     key={province.idProvince}
-                    value={province.nameProvince}
+                    value={province.idProvince}
                   >
                     {province.nameProvince}
                   </MenuItem>
@@ -135,9 +143,14 @@ const UserProfile = () => {
               />
             </FormControl>
 
-            <Button variant="contained"  onClick={handleSaveChanges} disabled={!isProvinceSelected || !isCityEntered || !isCityValid }>Guardar Cambios</Button>
+            <Button
+              variant="contained"
+              onClick={handleSaveChanges}
+              disabled={!isProvinceSelected || !isCityEntered || !isCityValid}
+            >
+              Guardar Cambios
+            </Button>
           </form>
-         
         </div>
       </div>
     </div>
