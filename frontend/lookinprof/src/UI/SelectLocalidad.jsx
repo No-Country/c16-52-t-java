@@ -1,12 +1,27 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import SelectProvince from '../../UI/SelectProvince';
-const [provincia, setProvincia] = useState('');
-
+import axios from 'axios';
 
 const SelectLocalidad = () => {
-  return (
-    <div>SelectLocalidad</div>
-  )
+    const [cities, setCities] = useState([]);
+
+    useEffect(() => {
+        const fetchCities = async () => {
+            try {
+                const citiesRes = await axios.get("http://localhost:8080/city/get");
+                setCities(citiesRes.data || []);
+            } catch (error) {
+                console.error('Error al obtener las ciudades:', error);
+            }
+        };
+        fetchCities();
+    }, []);
+
+    return (
+        <div>
+            <SelectProvince cities={cities} />
+        </div>
+    )
 }
 
-export default SelectLocalidad
+export default SelectLocalidad;

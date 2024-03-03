@@ -4,139 +4,102 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 const SelectProvince = ({ onProvinciaChange }) => {
     const [provincias, setProvincias] = useState([]);
-    const [selectedProvId, setSelectedProvId] = useState("");
-    const [departamentos, setDepartamentos] = useState([]);
-    const [selectedDepId, setSelectedDepId] = useState("");
-    const [localidades, setLocalidades] = useState([]);
-    const [selectedLocId, setSelectedLocId] = useState("");
+    const [selectedProvId, setSelectedProvId] = useState('');
+    const [selectedProvName, setSelectedProvName] = useState('');
+    const [cities, setCities] = useState([]);
+    const [selectedCityId, setSelectedCityId] = useState('');
 
     useEffect(() => {
-        const getProvincias = async () => {
+        const fetchData = async () => {
             try {
-                const res = await axios.get("https://apis.datos.gob.ar/georef/api/provincias");
-                setProvincias(res.data.provincias);
+                const provincesRes = await axios.get("http://localhost:8080/provinces/get");
+                setProvincias(provincesRes.data || []);
             } catch (error) {
                 console.error('Error al obtener las provincias:', error);
             }
+            try {
+                const citiesRes = await axios.get("http://localhost:8080/city/get");
+                setCities(citiesRes.data || []);
+            } catch (error) {
+                console.error('Error al obtener las ciudades:', error);
+            }
         };
-
-        getProvincias();
+        fetchData();
     }, []);
 
     const handleProvinceChange = async (event) => {
-        const newSelectedProvId = event.target.value;
-        setSelectedProvId(newSelectedProvId);
-        setSelectedDepId("");
-        setSelectedLocId("");
+        const newSelectedProvName = event.target.value;
+        setSelectedProvName(newSelectedProvName);
 
-        try {
-            const res = await axios.get(`https://apis.datos.gob.ar/georef/api/departamentos?provincia=${newSelectedProvId}&max=200`);
-            setDepartamentos(res.data.departamentos);
-        } catch (error) {
-            console.error('Error al obtener los departamentos:', error);
+        // Find the selected province ID
+        const selectedProvince = provincias.find(prov => prov.nameProvince === newSelectedProvName);
+        if (selectedProvince) {
+            setSelectedProvId(selectedProvince.idProvince);
+        } else {
+            setSelectedProvId('');
         }
-        
+        if (newSelectedProvName !== '') {
+            try {
+                const res = await axios.get("http://localhost:8080/city/get");
+                const filteredCities = res.data.filter(city => city.province === newSelectedProvName);
+                setCities(filteredCities || []);
+            } catch (error) {
+                console.error('Error al obtener las ciudades:', error);
+            }
+        } else {
+            // If no province is selected, clear cities
+            setCities([]);
+        }
+        setSelectedCityId(""); // Reset selected city
+    };
+    const handleCityChange = (event) => {
+        const newSelectedCityId = event.target.value;
+        setSelectedCityId(newSelectedCityId);
         if (onProvinciaChange) {
-            const selectedProvince = provincias.find(prov => prov.id === newSelectedProvId);
-            const selectedProvinceData = {
-                provincia: selectedProvince,
-                departamento: null,
-                localidad: null
-            };
-            onProvinciaChange(selectedProvinceData);
+            // Pass both province ID and city ID to the parent component
+            onProvinciaChange(selectedProvId, newSelectedCityId);
         }
     };
-
-    const handleDepartamentoChange = async (event) => {
-        const newSelectedDepId = event.target.value;
-        setSelectedDepId(newSelectedDepId);
-        setSelectedLocId("");
-
-        try {
-            const res = await axios.get(`https://apis.datos.gob.ar/georef/api/localidades?departamento=${newSelectedDepId}&max=200`);
-            setLocalidades(res.data.localidades);
-        } catch (error) {
-            console.error('Error al obtener las localidades:', error);
-        }
-
-        const selectedDep = departamentos.find(dep => dep.id === newSelectedDepId);
-        const selectedProvince = provincias.find(prov => prov.id === selectedProvId);
-        const selectedProvinceData = {
-            provincia: selectedProvince,
-            departamento: selectedDep,
-            localidad: null
-        };
-        onProvinciaChange(selectedProvinceData);
-    };
-
-    const handleLocalidadChange = (event) => {
-        const newSelectedLocId = event.target.value;
-        setSelectedLocId(newSelectedLocId);
-
-        const selectedLoc = localidades.find(loc => loc.id === newSelectedLocId);
-        const selectedDep = departamentos.find(dep => dep.id === selectedDepId);
-        const selectedProvince = provincias.find(prov => prov.id === selectedProvId);
-        const selectedProvinceData = {
-            provincia: selectedProvince.nombre,
-            departamento: selectedDep.nombre,
-            localidad: selectedLoc.nombre
-        };
-        onProvinciaChange(selectedProvinceData);
-    };
-
     return (
         <div className='flex flex-col gap-4'>
             <FormControl fullWidth>
                 <InputLabel id="provincia-select-label">Provincias</InputLabel>
                 <Select
                     labelId="provincia-select-label"
-                    value={selectedProvId}
+                    value={selectedProvName}
                     onChange={handleProvinceChange}
                     label="Provincias"
                 >
+                    <MenuItem value="">
+                        <em>None</em>
+                    </MenuItem>
                     {provincias.map((prov) => (
-                        <MenuItem key={prov.id} value={prov.id}>
-                            {prov.nombre}
+                        <MenuItem key={prov.idProvince} value={prov.nameProvince}>
+                            {prov.nameProvince}
                         </MenuItem>
                     ))}
                 </Select>
             </FormControl>
 
-            {departamentos.length > 0 && (
-                <FormControl fullWidth>
-                    <InputLabel id="departamento-select-label">Departamentos</InputLabel>
-                    <Select
-                        labelId="departamento-select-label"
-                        value={selectedDepId}
-                        onChange={handleDepartamentoChange}
-                        label="Departamentos"
-                    >
-                        {departamentos.map((dep) => (
-                            <MenuItem key={dep.id} value={dep.id}>
-                                {dep.nombre}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            )}
-
-            {localidades.length > 0 && (
-                <FormControl fullWidth>
-                    <InputLabel id="localidad-select-label">Localidades</InputLabel>
-                    <Select
-                        labelId="localidad-select-label"
-                        value={selectedLocId}
-                        onChange={handleLocalidadChange}
-                        label="Localidades"
-                    >
-                        {localidades.map((loc) => (
-                            <MenuItem key={loc.id} value={loc.id}>
-                                {loc.nombre}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            )}
+            <FormControl fullWidth>
+                <InputLabel id="city-select-label">Ciudades</InputLabel>
+                <Select
+                    labelId="city-select-label"
+                    value={selectedCityId}
+                    onChange={handleCityChange}
+                    label="Ciudades"
+                    disabled={cities.length === 0}
+                >
+                    <MenuItem value="">
+                        <em>Seleccione una ciudad</em>
+                    </MenuItem>
+                    {cities.map((city) => (
+                        <MenuItem key={city.idCity} value={city.idCity}>
+                            {city.nameCity}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
         </div>
     );
 };

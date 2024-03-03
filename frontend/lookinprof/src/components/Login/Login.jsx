@@ -25,6 +25,7 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -70,17 +71,7 @@ const Login = () => {
     return true;
   };
 
-  const emailExists = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8080/user/email?email=${email}`);
-      return response.status === 200;
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        setEmailError('El correo electrónico no está registrado.');
-        return true;
-      } 
-    }
-  };
+ 
 
   const signIn = async (e) => {
     e.preventDefault();
@@ -92,10 +83,7 @@ const Login = () => {
       return;
     }
 
-    const emailExistsCheck = await emailExists();
-    if (!emailExistsCheck) {
-      return;
-    }
+   
     try {
       const responseData = await axios.post('http://localhost:8080/auth/login', { email, password });
       const token = responseData.data.token;
@@ -106,6 +94,7 @@ const Login = () => {
       alert(`Hola de nuevo!! ${decodedPayload.firstName}`);
       navigate('/');
     } catch (error) {
+      console.log(error)
       if (error.response && error.response.status === 401) {
         setPasswordError('La contraseña es incorrecta.');
       } else {
