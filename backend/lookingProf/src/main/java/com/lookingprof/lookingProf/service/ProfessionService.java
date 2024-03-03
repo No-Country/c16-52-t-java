@@ -20,7 +20,7 @@ public class ProfessionService implements IProffesionService {
     public Optional<List<ProfessionResponseDTO>> getAllProfessions() {
         List<Profession> professionList = professionRepository.findAll();
         List<ProfessionResponseDTO> listProfessionDTO = new ArrayList<>();
-        if(professionList.isEmpty()){
+        if (professionList.isEmpty()) {
             return Optional.empty();
         } else {
             professionList.forEach(profession -> {
@@ -53,7 +53,8 @@ public class ProfessionService implements IProffesionService {
 
     @Override
     public ProfessionResponseDTO getProfessionDTOById(Integer idProfession) {
-        ProfessionResponseDTO professionResponseDTO = new ProfessionResponseDTO(professionRepository.findById(idProfession).get());
+        ProfessionResponseDTO professionResponseDTO = new ProfessionResponseDTO(
+                professionRepository.findById(idProfession).get());
         return professionResponseDTO;
     }
 

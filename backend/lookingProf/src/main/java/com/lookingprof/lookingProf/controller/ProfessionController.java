@@ -18,40 +18,41 @@ public class ProfessionController {
     @Autowired
     private IProffesionService proffesionService;
 
-    //get all professionals
+    // get all professionals
     @GetMapping("/get")
-    public ResponseEntity<?> getAllProfessionals(){
+    public ResponseEntity<?> getAllProfessionals() {
         Optional<List<ProfessionResponseDTO>> listOptional = proffesionService.getAllProfessions();
-        if(listOptional.isPresent()){
+        if (listOptional.isPresent()) {
             return ResponseEntity.ok(listOptional.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron profesiones");
         }
     }
 
-    //find professional by id
+    // find professional by id
     @GetMapping("/get/{idProfession}")
-    public ProfessionResponseDTO findProfession(@PathVariable Integer idProfession){
+    public ProfessionResponseDTO findProfession(@PathVariable Integer idProfession) {
         ProfessionResponseDTO professionResponseDTO = proffesionService.getProfessionDTOById(idProfession);
         return professionResponseDTO;
     }
-    //create profession
+
+    // create profession
     @PostMapping("/create")
-    public String createProfession (@RequestBody Profession profession){
+    public String createProfession(@RequestBody Profession profession) {
         proffesionService.saveProfession(profession);
         return "Created Profession";
     }
 
-    //delete profession
+    // delete profession
     @DeleteMapping("/delete/{idProfession}")
-    public String deleteProfession (@PathVariable Integer idProfession){
+    public String deleteProfession(@PathVariable Integer idProfession) {
         proffesionService.deleteProfession(idProfession);
         return "Deleted Profession";
     }
 
-    //edit profession
+    // edit profession
     @PutMapping("/edit")
-    public Profession editProfession(@RequestBody Profession profession){
+    public Profession editProfession(@RequestBody Profession profession) {
         proffesionService.editProfession(profession);
         return proffesionService.findProfessionById(profession.getIdProfession());
     }

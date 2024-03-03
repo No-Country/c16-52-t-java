@@ -8,23 +8,22 @@ import java.util.Optional;
 
 public interface IProffesionService {
 
-    //get profession
+    // get profession
     public Optional<List<ProfessionResponseDTO>> getAllProfessions();
 
-    //get proffesion by id
+    // get proffesion by id
     public Profession findProfessionById(Integer idProfession);
 
-    //create profession
+    // create profession
     public void saveProfession(Profession profession);
 
-    //delete profession
+    // delete profession
     public void deleteProfession(Integer idProfession);
 
-    //edit profession
-    public void editProfession (Profession profession);
+    // edit profession
+    public void editProfession(Profession profession);
 
     public ProfessionResponseDTO getProfessionDTOById(Integer idProfession);
-
 
     Profession getProfessionByName(String profession);
 

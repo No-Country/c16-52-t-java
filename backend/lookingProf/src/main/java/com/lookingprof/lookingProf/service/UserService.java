@@ -126,7 +126,7 @@ public class UserService implements IUserService {
     public Optional<UserResponseDTO> updateUser(Integer id, UserRequestDTO userUpdate) {
         System.out.println("Usuario recibido:   " + userUpdate);
         Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isEmpty()){
+        if (userOptional.isEmpty()) {
             return Optional.empty();
         }
         User user = userOptional.get();
@@ -135,7 +135,8 @@ public class UserService implements IUserService {
             user.setCity(cityService.getCityById(Integer.parseInt(userUpdate.getCity())));
             user.setProfession(professionService.getById(Integer.parseInt(userUpdate.getProfession())));
             user.setDescription(userUpdate.getDescription());
-            if(userUpdate.getImage() != null) user.setImageUrl(imageService.copyProfileImg(user.getImageUrl(), userUpdate.getImage()));
+            if (userUpdate.getImage() != null)
+                user.setImageUrl(imageService.copyProfileImg(user.getImageUrl(), userUpdate.getImage()));
             userRepository.save(user);
             return Optional.of(new UserResponseDTO(user));
         } catch (Exception e) {
@@ -158,7 +159,6 @@ public class UserService implements IUserService {
         return Optional.of(listUserDTO);
     }
 
-
     @Override
     public Optional<List<UserResponseDTO>> findByProvince(String province) {
         List<User> users = userRepository.findByProvince_NameProvince(province);
@@ -176,18 +176,18 @@ public class UserService implements IUserService {
 
     @Override
     public Optional<List<UserResponseDTO>> findByCity(String city) {
-            List<User> users = userRepository.findByCity_NameCity(city);
-            if (users.isEmpty()) {
-                return Optional.empty();
-            } else {
-                List<UserResponseDTO> listUserDTO = new ArrayList<>();
-                users.forEach(user -> {
-                    UserResponseDTO userResponseDTO = new UserResponseDTO(user);
-                    listUserDTO.add(userResponseDTO);
-                });
-                return Optional.of(listUserDTO);
-            }
+        List<User> users = userRepository.findByCity_NameCity(city);
+        if (users.isEmpty()) {
+            return Optional.empty();
+        } else {
+            List<UserResponseDTO> listUserDTO = new ArrayList<>();
+            users.forEach(user -> {
+                UserResponseDTO userResponseDTO = new UserResponseDTO(user);
+                listUserDTO.add(userResponseDTO);
+            });
+            return Optional.of(listUserDTO);
         }
+    }
 
     @Override
     public Optional<List<UserResponseDTO>> findByQualification(int qualification) {
@@ -206,7 +206,8 @@ public class UserService implements IUserService {
 
     @Override
     public AuthResponse loginUser(LoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         String token = jwtService.getToken(user);
         return AuthResponse.builder().token(token).build();
@@ -241,21 +242,20 @@ public class UserService implements IUserService {
         return new org.springframework.security.core.userdetails.User(
                 userDetails.getUsername(),
                 "",
-                userDetails.getAuthorities()
-        );
+                userDetails.getAuthorities());
     }
 
     @Override
     public List<UserResponseDTO> listAllActives() {
         List<User> userList = userRepository.findAllNotDeleted();
-        if(!userList.isEmpty()){
+        if (!userList.isEmpty()) {
             List<UserResponseDTO> listUsersDto = new ArrayList<>();
             userList.forEach(user -> {
                 UserResponseDTO userResponseDTO = new UserResponseDTO(user);
                 listUsersDto.add(userResponseDTO);
             });
             return listUsersDto;
-        }else{
+        } else {
             throw new RuntimeException("No hay usuarios activos registrados");
         }
     }

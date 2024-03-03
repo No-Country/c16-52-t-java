@@ -1,6 +1,5 @@
 package com.lookingprof.lookingProf.model;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +24,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-
 @Entity
 @Data
 @AllArgsConstructor
@@ -35,7 +33,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idUser;
-        @NotEmpty(message = "El apellido no puede estar vacío")
+    @NotEmpty(message = "El apellido no puede estar vacío")
     private String lastName;
     @NotEmpty(message = "El nombre de usuario no puede estar vacío")
     private String firstName;
@@ -46,20 +44,20 @@ public class User implements UserDetails {
     private String email;
     @NotEmpty(message = "La contraseña no puede estar vacía")
     private String password;
-    @Size(max=20 , message = "El número de teléfono debe tener 10 dígitos")
+    @Size(max = 20, message = "El número de teléfono debe tener 10 dígitos")
     private String phone;
     private String address;
-//    @NotEmpty(message = "El país no puede estar vacío")
+    // @NotEmpty(message = "El país no puede estar vacío")
     private String country;
 
     @ManyToOne
     @JoinColumn(name = "idProvince", referencedColumnName = "idProvince")
-//    @NotEmpty(message = "Debe seleccionar una provincia")
+    // @NotEmpty(message = "Debe seleccionar una provincia")
     private Province province;
 
     @ManyToOne
     @JoinColumn(name = "idCity", referencedColumnName = "idCity")
-//    @NotEmpty(message = "Debe seleccionar una ciudad")
+    // @NotEmpty(message = "Debe seleccionar una ciudad")
     private City city;
 
     private Integer qualification;
@@ -126,6 +124,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 
 }
