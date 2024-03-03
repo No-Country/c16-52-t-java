@@ -72,7 +72,7 @@ const NavBar = () => {
         <nav ref={navRef} className='w-full h-24 sticky top-0 bg-white flex items-center justify-between px-4 md:px-20 z-50'>
             {/* Logo y marca */}
             <div className='flex items-center'>
-                <Link to={'/'} className='font-bold text-xl text-[#004466]'>
+                <Link to={'/'} className='font-bold lg:text-xl text-[#004466]'>
                     LookingProf
                 </Link>
             </div>

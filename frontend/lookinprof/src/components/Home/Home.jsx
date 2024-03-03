@@ -77,11 +77,7 @@ const Home = () => {
         <h3 className='text-[#004466] text-xl text-center p-4'>Nuestra selección de profesionales</h3>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-auto max-w-[1100px] min-w-[320px] p-2 justify-center'>
           {servicesHome.map((item) => (
-<<<<<<< HEAD
             <div key={item.idUser} className='p-10 m-10 border-[#004466] border-2  shadow-slate-400 shadow-xl rounded-lg h-auto'>
-=======
-            <div key={item.idUser} className='m-2 border-[#004466] border-2 rounded-lg h-auto'>
->>>>>>> 9fbc0380e435f3416db788d3a6c616d98c77d649
               <Cards className='flex flex-col items-center'>
                 <div>
                   <img src={item.imageUrl} alt={item.title} className='w-full h-[200px] object-cover rounded-t-lg mb-4' />

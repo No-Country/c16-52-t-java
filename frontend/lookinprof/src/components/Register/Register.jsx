@@ -28,9 +28,7 @@ const Register = () => {
     firstName: "",
     lastName: "",
     password: "",
-    role: "USER",
-    name_province:"Santa Fe",
-    city:"Santa Fe"
+    role: "USER"
   });
   const [formErrors, setFormErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
