@@ -56,4 +56,14 @@ public class ProfessionService implements IProffesionService {
         ProfessionResponseDTO professionResponseDTO = new ProfessionResponseDTO(professionRepository.findById(idProfession).get());
         return professionResponseDTO;
     }
+
+    @Override
+    public Profession getProfessionByName(String profession) {
+        return professionRepository.findByNameProfession(profession);
+    }
+
+    @Override
+    public Profession getById(Integer id) {
+        return professionRepository.findById(id).get();
+    }
 }

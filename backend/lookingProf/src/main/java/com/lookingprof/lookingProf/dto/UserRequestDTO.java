@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @AllArgsConstructor
@@ -13,15 +14,11 @@ import lombok.ToString;
 @ToString
 public class UserRequestDTO {
 //aca van los campos para editar y crear el usuario
-    private String lastName;
-    private String firstName;
-    private int province;
+    private String province;
     private String city;
-    private String phone;
-    private Integer qualification;
-    private int profession;
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    private String profession;
+    private String role;
     private String description;
+    private MultipartFile image;
 
 }

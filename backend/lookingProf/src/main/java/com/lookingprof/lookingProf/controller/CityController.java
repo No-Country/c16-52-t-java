@@ -2,6 +2,7 @@ package com.lookingprof.lookingProf.controller;
 
 import com.lookingprof.lookingProf.dto.CityDTO;
 import com.lookingprof.lookingProf.model.City;
+import com.lookingprof.lookingProf.service.CityService;
 import com.lookingprof.lookingProf.service.ICityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -18,7 +19,7 @@ import java.util.Optional;
 public class CityController {
 
     @Autowired
-    private ICityService cityService;
+    private CityService cityService;
     //get all cities
     @GetMapping("/get")
     public ResponseEntity<?> getAllCity(){

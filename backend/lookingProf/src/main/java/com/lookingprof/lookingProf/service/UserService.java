@@ -1,8 +1,8 @@
 package com.lookingprof.lookingProf.service;
 
-import com.lookingprof.lookingProf.Auth.AuthResponse;
-import com.lookingprof.lookingProf.Auth.LoginRequest;
-import com.lookingprof.lookingProf.Auth.RegisterRequest;
+import com.lookingprof.lookingProf.config.Auth.AuthResponse;
+import com.lookingprof.lookingProf.config.Auth.LoginRequest;
+import com.lookingprof.lookingProf.config.Auth.RegisterRequest;
 import com.lookingprof.lookingProf.dto.UserRequestDTO;
 import com.lookingprof.lookingProf.dto.UserResponseDTO;
 import com.lookingprof.lookingProf.exceptions.UserDeleteException;
@@ -23,6 +23,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,9 +52,10 @@ public class UserService implements IUserService {
 
     @Autowired
     ProvinceService provinceService;
-
     @Autowired
     ProfessionService professionService;
+    @Autowired
+    ImageService imageService;
 
     @Override
     @Transactional(readOnly = true)
@@ -100,7 +102,6 @@ public class UserService implements IUserService {
             return Optional.empty();
         }
         User user = userOptional.get();
-
         return Optional.of(new UserResponseDTO(user));
     }
 
@@ -123,31 +124,18 @@ public class UserService implements IUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Optional<UserResponseDTO> updateUser(Integer id, UserRequestDTO userUpdate) {
-        City city = cityService.getCityByName(userUpdate.getCity());
-        Province province = provinceService.getProvinceById(userUpdate.getProvince());
-        Profession profession = professionService.findProfessionById(userUpdate.getProfession());
-
+        System.out.println("Usuario recibido:   " + userUpdate);
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty()){
             return Optional.empty();
         }
         User user = userOptional.get();
         try {
-            user.setPhone(userUpdate.getPhone());
-            user.setProvince(province);
-            user.setProfession(profession);
+            user.setProvince(provinceService.getProvinceById(Integer.parseInt(userUpdate.getProvince())));
+            user.setCity(cityService.getCityById(Integer.parseInt(userUpdate.getCity())));
+            user.setProfession(professionService.getById(Integer.parseInt(userUpdate.getProfession())));
             user.setDescription(userUpdate.getDescription());
-
-            if (city != null){
-                user.setCity(city);
-            } else {
-                City city1 = new City();
-                city1.setNameCity(userUpdate.getCity());
-                city1.setProvince(province);
-                cityRepository.save(city1);
-
-                user.setCity(city1);
-            }
+            if(userUpdate.getImage() != null) user.setImageUrl(imageService.copyProfileImg(user.getImageUrl(), userUpdate.getImage()));
             userRepository.save(user);
             return Optional.of(new UserResponseDTO(user));
         } catch (Exception e) {
@@ -228,7 +216,7 @@ public class UserService implements IUserService {
     public AuthResponse registerUser(RegisterRequest request) {
         Province province = provinceService.getProvinceById(request.getProvinceId());
         City city = cityService.getCityById(request.getCityId());
-
+        System.out.println(request.getRole() + " " + request.getRole().getClass());
         User user = new User();
         user.setEmail(request.getEmail());
         user.setFirstName(request.getFirstName());

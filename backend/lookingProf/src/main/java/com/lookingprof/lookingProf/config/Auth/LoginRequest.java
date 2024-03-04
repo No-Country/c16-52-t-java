@@ -1,4 +1,4 @@
-package com.lookingprof.lookingProf.Auth;
+package com.lookingprof.lookingProf.config.Auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,8 +7,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class AuthResponse {
-    String token;
+@AllArgsConstructor
+public class LoginRequest {
+
+    String email;
+    String password;
+
 }

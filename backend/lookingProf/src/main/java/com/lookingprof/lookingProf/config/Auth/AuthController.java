@@ -1,4 +1,4 @@
-package com.lookingprof.lookingProf.Auth;
+package com.lookingprof.lookingProf.config.Auth;
 
 import com.lookingprof.lookingProf.service.UserService;
 import lombok.RequiredArgsConstructor;

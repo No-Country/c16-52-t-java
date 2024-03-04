@@ -26,4 +26,7 @@ public interface IProffesionService {
     public ProfessionResponseDTO getProfessionDTOById(Integer idProfession);
 
 
+    Profession getProfessionByName(String profession);
+
+    Profession getById(Integer id);
 }
