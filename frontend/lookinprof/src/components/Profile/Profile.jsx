@@ -41,7 +41,7 @@ const Profile = () => {
   const hasUserRole = userData && userData.role === "USER"; 
 
   return (
-    <div className='flex flex-col items-center justify-center'>
+    <div className=''>
       {hasUserRole ? <UserProfile /> : <ServiceProfile />}
     </div>
   );

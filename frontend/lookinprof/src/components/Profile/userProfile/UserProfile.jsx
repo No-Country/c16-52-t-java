@@ -75,7 +75,7 @@ const UserProfile = () => {
 
   const handleSaveChanges = async () => {
     try {
-      await axios.put(
+      const response = await axios.put(
         `http://localhost:8080/user/${id}`,
         editedData,
         {
@@ -86,15 +86,15 @@ const UserProfile = () => {
           },
         }
       );
-      window.location.reload();
-      setIsEditing(false); 
-      
+      setUserData(response.data);
+      setIsEditing(false);
     } catch (error) {
       console.error("Error updating user data:", error);
     }
   };
-  const formattedDate = userData?.createdAt
-    ? new Date(userData.createdAt).toLocaleDateString("es-ES", {
+
+  const formattedDate = userData?.createAt
+    ? new Date(userData?.createAt).toLocaleDateString("es-ES", {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
@@ -102,51 +102,36 @@ const UserProfile = () => {
     : "";
 
   return (
-    <div className="flex justify-center m-10">
+    <div className="flex flex-col items-center justify-center w-full">
       {/* Profile Image */}
-      <div className="shadow-2xl rounded-3xl shadow-gray-400 bg-slate-200 w-1/2 flex items-center relative min-w-96 left-20">
-        <img
-          src={userData?.imageUrl || profile}
-          alt="User Profile"
-          className="max-w-64 ml-3 z-20"
-        />
-      </div>
+      <img
+        src={userData?.imageUrl || profile}
+        alt="User Profile"
+        className="max-w-64 mb-5 hidden md:block"
+      />
 
       {/* User Information Form */}
-      <div className="shadow-2xl rounded-3xl shadow-gray-400 px-20 py-20 flex flex-col justify-between w-[500px] z-10  bg-white">
+      <div className="shadow-2xl rounded-3xl md:p-5 p-1 flex flex-col items-center justify-center md:w-[500px] w-full bg-white">
         <div className="text-center space-y-5">
           {/* User Name */}
-          <h2 className="text-4xl text-[#004466] font-extrabold">
+          <h2 className="md:text-2xl text-xl font-bold">
             {`${userData?.firstName.toUpperCase()} ${userData?.lastName.toUpperCase()}`}
           </h2>
-
-          {/* Member Since */}
-          <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
-            Miembro desde:
-            <Typography variant="subtitle1" gutterBottom>
-              {formattedDate}
-            </Typography>
-          </Typography>
-
-          {/* Contact information */}
-          <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
-            Contacto:
-            <Typography variant="subtitle1" gutterBottom>
-              {userData?.email}
-            </Typography>
-          </Typography>
-
-          {/* Residence Section */}
-          <Typography variant="h6" gutterBottom sx={{ fontWeight: "semi-bold" }}>
-           {isEditing ? "Nueva Residencia: " : "Lugar de residencia"}
-          </Typography>
-
-          {/* Editable Residence Form */}
-          {isEditing ? ( 
-            // Editable form when in editing mode
-            <form className="flex flex-col item-center justify-center gap-2">
-              <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="provincia" size="small">Provincia</InputLabel>
+          <p className="text-xs md-text-xl" gutterBottom>
+            Miembro desde: {formattedDate}
+          </p>
+          <p className="text-xs md-text-xl" gutterBottom>
+            Contacto: {userData?.email}
+          </p>
+          <p className="text-xs md:text-xl font-semibold" gutterBottom>
+            {isEditing ? "Nueva Residencia: " : "Lugar de residencia"}
+          </p>
+          {isEditing ? (
+            <form className="flex flex-col item-center justify-center gap-2 w-full">
+              <FormControl sx={{ minWidth: 120 }}>
+                <InputLabel id="provincia" size="small">
+                  Provincia
+                </InputLabel>
                 <Select
                   labelId="provincia"
                   label="Provincia"
@@ -155,24 +140,23 @@ const UserProfile = () => {
                   onChange={handleProvinceChange}
                 >
                   {provinces.map((province) => (
-                    <MenuItem key={province.idProvince} value={province.idProvince}>
+                    <MenuItem
+                      key={province.idProvince}
+                      value={province.idProvince}
+                    >
                       {province.nameProvince}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
-
-              <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <TextField
-                  helperText="Por favor digíte la ciudad de residencia"
-                  id="ciudad"
-                  label="Ciudad"
-                  size="small"
-                  value={editedData.city}
-                  onChange={handleCityChange}
-                />
-              </FormControl>
-
+              <TextField
+                helperText="Por favor digíte la ciudad de residencia"
+                id="ciudad"
+                label="Ciudad"
+                size="small"
+                value={editedData.city}
+                onChange={handleCityChange}
+              />
               <Button
                 variant="contained"
                 onClick={handleSaveChanges}
@@ -182,15 +166,12 @@ const UserProfile = () => {
               </Button>
             </form>
           ) : (
-            // Display static residence information when not in editing mode
             <div>
-              <Typography variant="subtitle1" gutterBottom>
+              <p className="text-xs md-text-xl" gutterBottom>
                 {`${userData?.city}, ${userData?.province}`}
-              </Typography>
+              </p>
             </div>
           )}
-
-          {/* Edit and Cancel Buttons */}
           <Button
             variant="contained"
             onClick={() => setIsEditing(!isEditing)}
