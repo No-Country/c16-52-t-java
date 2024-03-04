@@ -14,7 +14,6 @@ import { useParams } from "react-router-dom";
 import profile from "../../../assets/profile.svg";
 
 const UserProfile = () => {
-  const dispatch = useDispatch();
   const { id } = useParams();
   const token = localStorage.getItem("jwt");
 

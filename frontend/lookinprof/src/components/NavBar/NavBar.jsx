@@ -1,6 +1,6 @@
 // Importar módulos necesarios de React y otras bibliotecas
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../redux/slices/userSlice';
 import { Button } from '@mui/material';
@@ -36,14 +36,12 @@ const NavBar = () => {
     const [active, setActive] = useState(0);
     const [menuOpen, setMenuOpen] = useState(false);
     const navRef = useRef(null); // Creación de una referencia para el componente de navegación
-    const location = useLocation();
     const dispatch = useDispatch(); // Acceso a la función de despacho de Redux
     const navigate = useNavigate(); // Acceso a la función de navegación proporcionada por React Router
     const { currentUser } = useSelector(({user}) => user); // Extracción de la información del usuario del almacen de Redux
     // Función para alternar la apertura/cierre del menú
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
-        
     };
 
     // Gancho de efecto para manejar clics fuera del menú para cerrarlo
@@ -60,13 +58,12 @@ const NavBar = () => {
             document.removeEventListener('mousedown', closeMenuOnClickOutside);
         };
     }, []);
-
     // Función para cerrar la sesión del usuario
     const logout = () => {
         dispatch(setCurrentUser(null)); // Despachar una acción para actualizar el usuario actual en el almacen de Redux
         navigate('/'); // Navegar al usuario a la página de inicio después de cerrar la sesión
     };
-
+    console.log(currentUser)
     // Renderización del componente de barra de navegación
     return (
         <nav ref={navRef} className='w-full h-24 sticky top-0 bg-white flex items-center justify-between px-4 md:px-20 z-50'>
@@ -122,7 +119,7 @@ const NavBar = () => {
                             {/* Menú desplegable para acciones del usuario */}
                             {menuOpen && (
                                 <div className="absolute top-10 right-0 z-10 text-end p-2">
-                                    <NavLink to={`/profile/${currentUser.id}`} className='block py-2 px-4 text-green-600 hover:bg-gray-800/10 rounded-xl font-bold'>
+                                    <NavLink to={`/profile/${currentUser.idUser}`} className='block py-2 px-4 text-green-600 hover:bg-gray-800/10 rounded-xl font-bold'>
                                         Perfil
                                     </NavLink>
                                     <NavLink to={'/login'} className='block py-2 px-4 text-red-600 hover:bg-gray-800/10 rounded-xl font-bold' onClick={logout}>

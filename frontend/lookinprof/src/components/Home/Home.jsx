@@ -5,7 +5,6 @@ import bgCard from './../../assets/bgCardHome.svg';
 import ImageHome2 from './../../assets/ImageHomeSection2.svg';
 import Cards from '../../UI/cards/Cards';
 import { useNavigate } from 'react-router-dom';
-import { RiStarSFill, RiStarSLine } from "react-icons/ri";
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import axios from 'axios';

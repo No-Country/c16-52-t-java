@@ -74,33 +74,58 @@ const Login = () => {
 
   const signIn = async (e) => {
     e.preventDefault();
-
+  
     const isEmailValid = validateEmail(email);
     const isPasswordValid = validatePassword(password);
-
+  
     if (!isEmailValid || !isPasswordValid) {
       return;
     }
-
-   
+  
     try {
       const responseData = await axios.post('http://localhost:8080/auth/login', { email, password });
       const token = responseData.data.token;
+  
       localStorage.setItem('jwt', token);
-      const [ payload ] = token.split('.');
-      const decodedPayload = JSON.parse(atob(payload));
-      dispatch(setCurrentUser(decodedPayload));
-      alert(`Hola de nuevo!! ${decodedPayload.firstName}`);
+      
+  
+      const userResponse = await getUserData(email, token); // Moved the user data retrieval to a separate function
+  
+      dispatch(setCurrentUser(userResponse.data));
+      
+      alert(`Hola de nuevo!! ${userResponse.data.firstName}`); // Use userResponse.data instead of currentUser
+  
       navigate('/');
     } catch (error) {
-      console.log(error)
-      if (error.response && error.response.status === 401) {
-        setPasswordError('La contraseña es incorrecta.');
-      } else {
-        alert('Verifica correo y/o contraseña');
-      }
+      handleSignInError(error);
     }
   };
+  
+  // Utility function to decode the payload from token
+  function getDecodedPayload(token) {
+    const [payload] = token.split('.');
+    return JSON.parse(atob(payload));
+  }
+  
+  // Function to get user data using axios
+  async function getUserData(email, token) {
+    return await axios.get(`http://localhost:8080/user/email?email=${email}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+  
+  // Function to handle sign-in errors
+  function handleSignInError(error) {
+    console.log(error);
+    if (error.response && error.response.status === 401) {
+      setPasswordError('La contraseña es incorrecta.');
+    } else {
+      alert('Verifica correo y/o contraseña');
+    }
+  }
 
  
   
