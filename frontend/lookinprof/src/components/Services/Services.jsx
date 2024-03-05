@@ -22,7 +22,7 @@ const Services = () => {
     const [cities, setCities] = useState([]);
     const navigate = useNavigate();
     const [sortOrder, setSortOrder] = useState('asc');
-
+    window.scroll(0, 0);
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -84,12 +84,12 @@ const Services = () => {
 
     return (
         <section className='lg:p-10 flex flex-col justify-center items-center'>
-            <div className='flex flex-row xs:flex-col items-center justify-center lg:max-w-[1100px] w-full'>
+            <div className='flex flex-row xs:flex-col items-center justify-center lg:max-w-[1100px] lg:w-full'>
                 <img src={ServiciosImages} alt="" className='w-[400px] h-[400px] mb-8 lg:block hidden' />
-                <div className='flex flex-col items-center justify-center lg:gap-y-2 gap-y-10 md:w-full '>
-                    <h2 className='lg:mt-4 lg:text-3xl text-[#004466] font-black md:w-[350px] text-center'>Encuentra a los mejores profesionales cerca de ti</h2>
-                    <h5 className='text-[#223139] md:text-xl font-bold'>Filtrar profesionales por:</h5>
-                    <div className='flex flex-col gap-3 md:w-full lg:p-4 '>
+                <div className='flex flex-col items-center justify-center lg:justify-start lg:items-start lg:p-4 lg:gap-y-2 gap-y-10 md:w-full '>
+                    <h2 className='lg:mt-4 text-3xl text-[#004466] font-black md:w-[350px] text-center lg:text-start'>Encuentra a los mejores profesionales cerca de ti</h2>
+                    <h5 className='text-[#223139] text-xl font-bold'>Filtrar profesionales por:</h5>
+                    <div className='flex flex-col gap-3 md:w-full '>
                         <FormControl >
                             <InputLabel id="select-profession-label" size='small' >Selecciona una profesión</InputLabel>
                             <Select
@@ -156,7 +156,7 @@ const Services = () => {
                     </div>
                 </div>
             </div>
-            <div className='h-[150px] flex flex-row items-center justify-between lg:max-w-[1100px] lg:w-full'>
+            <div className='md:h-[150px] text-xs p-5 flex md:flex-row flex-col items-center md:justify-between lg:max-w-[1100px] lg:w-full'>
                 {services.length > 0 ? (<p>{services.length} Profesionales disponibles</p>) : <p>No hay profesionales disponibles</p>}
                 <Button onClick={() => handleSortOrderChange()} className='flex gap-2'>
                     Ordenar {sortOrder === 'desc' ? <IoMdArrowRoundDown /> : <IoMdArrowRoundUp />}

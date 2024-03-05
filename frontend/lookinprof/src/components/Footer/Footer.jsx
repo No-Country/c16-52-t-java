@@ -20,8 +20,8 @@ const SocialsNetwork = [
 
 const Footer = () => {
   return (
-    <footer className='w-full bg-[#004466] py-10 px-6 md:px-20'>
-      <div className='container mx-auto flex flex-col items-center md:flex-row md:justify-between gap-10 text-white'>
+    <footer className='w-auto bg-[#004466] py-10 px-6 md:px-20'>
+      <div className='container mx-auto flex flex-col items-center lg:flex-row lg:justify-between gap-10 text-white'>
         {/* Columna 1 */}
         <div>
           <h2 className='text-3xl font-bold mb-4'>LookingProf</h2>
@@ -44,7 +44,7 @@ const Footer = () => {
           </ul>
         </div>
       </div>
-      <div className='text-xs text-white text-center'>
+      <div className='text-[8px] md:text-xs text-white text-center'>
         <p>Copyright @ 2024, LookingProf All rights reserved.</p>
       </div>
     </footer>

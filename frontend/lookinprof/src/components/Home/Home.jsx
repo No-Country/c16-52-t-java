@@ -5,7 +5,6 @@ import bgCard from './../../assets/bgCardHome.svg';
 import ImageHome2 from './../../assets/ImageHomeSection2.svg';
 import Cards from '../../UI/cards/Cards';
 import { useNavigate } from 'react-router-dom';
-import { RiStarSFill, RiStarSLine } from "react-icons/ri";
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import axios from 'axios';
@@ -17,7 +16,7 @@ const Home = () => {
  // const sortedServicesData = servicesData.sort((a, b) => b.starts - a.starts);
   const professionals = servicesData.filter((item) => item.role === 'PROFESSIONAL');
   const servicesHome = professionals.slice(0, 6);
-
+ 
   useEffect(() => {
     let didCancel = false; 
     const fetchServicesData = async () => {

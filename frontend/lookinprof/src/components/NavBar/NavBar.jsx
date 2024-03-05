@@ -1,6 +1,6 @@
 // Importar módulos necesarios de React y otras bibliotecas
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../redux/slices/userSlice';
 import { Button } from '@mui/material';
@@ -36,7 +36,6 @@ const NavBar = () => {
     const [active, setActive] = useState(0);
     const [menuOpen, setMenuOpen] = useState(false);
     const navRef = useRef(null); // Creación de una referencia para el componente de navegación
-    const location = useLocation();
     const dispatch = useDispatch(); // Acceso a la función de despacho de Redux
     const navigate = useNavigate(); // Acceso a la función de navegación proporcionada por React Router
     const { currentUser } = useSelector(({user}) => user); // Extracción de la información del usuario del almacen de Redux
@@ -47,29 +46,38 @@ const NavBar = () => {
     };
 
     // Gancho de efecto para manejar clics fuera del menú para cerrarlo
-    useEffect(() => {
+     useEffect(() => {
         const closeMenuOnClickOutside = (e) => {
             if (navRef.current && !navRef.current.contains(e.target)) {
                 setMenuOpen(false);
             }
         };
 
-        document.addEventListener('mousedown', closeMenuOnClickOutside);
+        const closeMenuOnScroll = () => {
+            setMenuOpen(false);
+        };
+
+        if (menuOpen) {
+            document.addEventListener('mousedown', closeMenuOnClickOutside);
+            window.addEventListener('scroll', closeMenuOnScroll);
+        } else {
+            document.removeEventListener('mousedown', closeMenuOnClickOutside);
+            window.removeEventListener('scroll', closeMenuOnScroll);
+        }
 
         return () => {
             document.removeEventListener('mousedown', closeMenuOnClickOutside);
+            window.removeEventListener('scroll', closeMenuOnScroll);
         };
-    }, []);
-
+    }, [menuOpen]);
     // Función para cerrar la sesión del usuario
     const logout = () => {
         dispatch(setCurrentUser(null)); // Despachar una acción para actualizar el usuario actual en el almacen de Redux
         navigate('/'); // Navegar al usuario a la página de inicio después de cerrar la sesión
     };
-
     // Renderización del componente de barra de navegación
     return (
-        <nav ref={navRef} className='w-full h-24 sticky top-0 bg-white flex items-center justify-between px-4 md:px-20 z-50'>
+        <nav ref={navRef} className='w-auto h-24 sticky top-0 bg-white flex items-center justify-between px-20 z-40'>
             {/* Logo y marca */}
             <div className='flex items-center'>
                 <Link to={'/'} className='font-bold lg:text-xl text-[#004466]'>
@@ -121,14 +129,27 @@ const NavBar = () => {
                             </p>
                             {/* Menú desplegable para acciones del usuario */}
                             {menuOpen && (
-                                <div className="absolute top-10 right-0 z-10 text-end p-2">
-                                    <NavLink to={`/profile/${currentUser.id}`} className='block py-2 px-4 text-green-600 hover:bg-gray-800/10 rounded-xl font-bold'>
+                                
+                                <div className="absolute top-10  right-0 z-10 text-end p-2 h-[150px] bg-[white] rounded-b-lg flex flex-col items-center justify-center">
+                                    {
+                                        currentUser.role === "PROFESSIONAL" ? (
+                                            <>
+                                            <NavLink to={`/profile/${currentUser.idUser}`} className='block py-2 px-4 text-green-600 hover:bg-gray-800/10 rounded-xl font-bold'>
                                         Perfil
                                     </NavLink>
-                                    <NavLink to={'/login'} className='block py-2 px-4 text-red-600 hover:bg-gray-800/10 rounded-xl font-bold' onClick={logout}>
-                                        Cerrar sesión
-                                    </NavLink>
+                                    <NavLink to={'/login'} className='block py-2 px-4 text-red-600 hover:bg-gray-800/10 rounded-xl font-bold text-center' onClick={logout}>
+                                            Cerrar sesión
+                                        </NavLink>
+                                    
+                                            </>
+                                        ):(
+                                            <NavLink to={'/login'} className='block py-2 px-4 text-red-600 hover:bg-gray-800/10 rounded-xl font-bold text-center' onClick={logout}>
+                                            Cerrar sesión
+                                        </NavLink>
+                                        )
+                                    }
                                 </div>
+                                
                             )}
                         </div>
                     )}
@@ -136,7 +157,7 @@ const NavBar = () => {
             </div>
             {/* Menú desplegable para vista móvil */}
             {menuOpen && (
-                <div className="lg:hidden absolute top-20 right-4 bg-white shadow-md rounded-xl z-10">
+                <div className="lg:hidden absolute top-20 right-20 bg-white shadow-md rounded-xl z-10">
                      {links.map((item, index) => (
                         <div key={index} className={`${item.name !== "Iniciar sesión" && item.name !== "Registrarme" && 'after:h-[2px] after:w-0 after:bg-[#004466] relative after:absolute after:-bottom-1 after:left-0'}`}>
                             {/* Renderizado condicional de los enlaces según la autenticación del usuario */}
@@ -160,7 +181,7 @@ const NavBar = () => {
                                 
                             </p>
                             
-                            <NavLink to={'/profile'} className='block py-2 px-4 text-green-600 hover:bg-gray-800/10 rounded-xl font-bold'>
+                            <NavLink to={`/profile/${currentUser.id}`} className='block py-2 px-4 text-green-600 hover:bg-gray-800/10 rounded-xl font-bold'>
                                         Perfil
                                     </NavLink>
                                     <NavLink to={'/login'} className='block py-2 px-4 text-red-600 hover:bg-gray-800/10 rounded-xl font-bold' onClick={logout}>

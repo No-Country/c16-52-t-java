@@ -28,6 +28,7 @@ public class UserResponseDTO {
     private String province;
     private String city;
     private String description;
+    private Role role;
 
 
     public UserResponseDTO(User user){
@@ -43,5 +44,6 @@ public class UserResponseDTO {
         this.province = user.getProvince() != null ? user.getProvince().getNameProvince() : null;
         this.city = user.getCity() != null ? user.getCity().getNameCity() : null;
         this.description = user.getDescription();
+        this.role = user.getRole();
     }
 }

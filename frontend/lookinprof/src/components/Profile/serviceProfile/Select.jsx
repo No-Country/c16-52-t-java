@@ -4,7 +4,6 @@ const Select = ({label, options, onClick, editMode, value}) => {
     return (
         <div>
           <h2 className='text-2xl text-[#004466] font-bold pl-2 mb-1'>{label}</h2>
-    
           {editMode ? (
             <select
               type="text"
@@ -27,7 +26,6 @@ const Select = ({label, options, onClick, editMode, value}) => {
                 } else {
                   // Otra lógica si es necesario
                 }
-    
                 return (
                   <option key={index} value={optionValue}>
                     {optionName}
@@ -53,5 +51,5 @@ const Select = ({label, options, onClick, editMode, value}) => {
         </div>
       );
     };
-    
+
     export default Select;

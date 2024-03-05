@@ -64,12 +64,12 @@ public class DataLoader implements CommandLineRunner {
         }
 
         if (professionRepository.count() == 0) {
-            List<String> professions = List.of("Ama de llaves", "Albañil", "Carpintero", "Cerrajero", "Cocinera",
-                    "Costurera", "Cuidadora de niños", "Cuidadora de personas mayores", "Decorador", "Electricista",
-                    "Fontanero", "Fumigador", "Gasfitero", "Jardinero", "Lavaplatos", "Limpiador", "Mecánico",
-                    "Mozo de limpieza", "Pintor", "Plomero", "Reparador de electrodomésticos", "Reparador de muebles",
-                    "Reparador de tejados", "Reparador de ventanas", "Restaurador", "Sastre", "Tapicero",
-                    "Técnico de aire acondicionado", "Técnico de calefacción", "Técnico informático", "Yesero", "Zapatero"
+            List<String> professions = List.of("Ama de llaves", "Albañil", "Carpintero(a)", "Cerrajero(a)", "Cocinera(o)",
+                    "Costurera(o)", "Cuidadora de niños", "Cuidadora de personas mayores", "Decorador", "Electricista",
+                    "Fontanero(a)", "Fumigador(a)", "Gasfitero(a)", "Jardinero(a)", "Lavaplatos", "Limpiador(a)", "Mecánico",
+                    "Mozo(a) de limpieza", "Pintor(a)", "Plomero(a)", "Reparador(a) de electrodomésticos", "Reparador(a) de muebles",
+                    "Reparador(a) de tejados", "Reparador(a) de ventanas", "Restaurador(a)", "Sastre", "Tapicero(a)",
+                    "Técnico(a) de aire acondicionado", "Técnico(a) de calefacción", "Técnico(a) informático", "Yesero(a)", "Zapatero(a)"
             );
 
             List<Profession> professionList = professions.stream().map(profession -> {

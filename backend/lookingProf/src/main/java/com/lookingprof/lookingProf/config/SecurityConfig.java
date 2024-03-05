@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                     auth
-                            .requestMatchers("/auth/**", "/user/province", "/user/city", "/user/profession","/user/email", "/user/qualification/{qualification}").permitAll()
+                            .requestMatchers("/auth/**", "/user/province", "/user/city", "/user/profession","/user/email", "/user/qualification/{qualification}", "/user/all").permitAll()
                             .requestMatchers(HttpMethod.GET, "/user/{id}").authenticated()
                             .requestMatchers(HttpMethod.GET, "/user/firstName").authenticated()
                             .anyRequest().permitAll();
