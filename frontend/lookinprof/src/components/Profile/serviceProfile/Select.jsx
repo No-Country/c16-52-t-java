@@ -4,7 +4,7 @@ const Select = ({label, options, onClick, editMode, value}) => {
     return (
         <div>
           <h2 className='text-2xl text-[#004466] font-bold pl-2 mb-1'>{label}</h2>
-    
+
           {editMode ? (
             <select
               type="text"
@@ -18,13 +18,16 @@ const Select = ({label, options, onClick, editMode, value}) => {
                 if (label === "Provincia") {
                   optionValue = option.idProvince;
                   optionName = option.nameProvince;
-                }  else if (label === "Profesion") {
+                } else if (label === "Ciudad") {
+                  optionValue = option.idCity;
+                  optionName = option.nameCity;
+                } else if (label === "Profesion") {
                   optionValue = option.idProfession;
                   optionName = option.nameProfession;
                 } else {
                   // Otra lógica si es necesario
                 }
-    
+
                 return (
                   <option key={index} value={optionValue}>
                     {optionName}
@@ -50,5 +53,5 @@ const Select = ({label, options, onClick, editMode, value}) => {
         </div>
       );
     };
-    
+
     export default Select;

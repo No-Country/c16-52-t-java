@@ -75,7 +75,6 @@ const NavBar = () => {
         dispatch(setCurrentUser(null)); // Despachar una acción para actualizar el usuario actual en el almacen de Redux
         navigate('/'); // Navegar al usuario a la página de inicio después de cerrar la sesión
     };
-    console.log(currentUser)
     // Renderización del componente de barra de navegación
     return (
         <nav ref={navRef} className='w-auto h-24 sticky top-0 bg-white flex items-center justify-between px-20 z-40'>
@@ -132,12 +131,23 @@ const NavBar = () => {
                             {menuOpen && (
                                 
                                 <div className="absolute top-10  right-0 z-10 text-end p-2 h-[150px] bg-[white] rounded-b-lg flex flex-col items-center justify-center">
-                                    <NavLink to={`/profile/${currentUser.idUser}`} className='block py-2 px-4 text-green-600 hover:bg-gray-800/10 rounded-xl font-bold'>
+                                    {
+                                        currentUser.role === "PROFESSIONAL" ? (
+                                            <>
+                                            <NavLink to={`/profile/${currentUser.idUser}`} className='block py-2 px-4 text-green-600 hover:bg-gray-800/10 rounded-xl font-bold'>
                                         Perfil
                                     </NavLink>
                                     <NavLink to={'/login'} className='block py-2 px-4 text-red-600 hover:bg-gray-800/10 rounded-xl font-bold text-center' onClick={logout}>
-                                        Cerrar sesión
-                                    </NavLink>
+                                            Cerrar sesión
+                                        </NavLink>
+                                    
+                                            </>
+                                        ):(
+                                            <NavLink to={'/login'} className='block py-2 px-4 text-red-600 hover:bg-gray-800/10 rounded-xl font-bold text-center' onClick={logout}>
+                                            Cerrar sesión
+                                        </NavLink>
+                                        )
+                                    }
                                 </div>
                                 
                             )}
@@ -171,7 +181,7 @@ const NavBar = () => {
                                 
                             </p>
                             
-                            <NavLink to={`/profile/${currentUser.idUser}`} className='block py-2 px-4 text-green-600 hover:bg-gray-800/10 rounded-xl font-bold'>
+                            <NavLink to={`/profile/${currentUser.id}`} className='block py-2 px-4 text-green-600 hover:bg-gray-800/10 rounded-xl font-bold'>
                                         Perfil
                                     </NavLink>
                                     <NavLink to={'/login'} className='block py-2 px-4 text-red-600 hover:bg-gray-800/10 rounded-xl font-bold' onClick={logout}>

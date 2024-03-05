@@ -83,7 +83,12 @@ const Login = () => {
     }
   
     try {
-      const responseData = await axios.post('http://localhost:8080/auth/login', { email, password });
+      const responseData = await axios.post('http://localhost:8080/auth/login', { email, password },
+        {   
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+                    },}
+      );
       const token = responseData.data.token;
   
       localStorage.setItem('jwt', token);
@@ -113,6 +118,8 @@ const Login = () => {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
+        "Access-Control-Allow-Origin": "*",
+                    
       },
     });
   }
