@@ -13,6 +13,7 @@ import java.util.Optional;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class UserResponseDTO {
 
     private int idUser;
@@ -26,9 +27,9 @@ public class UserResponseDTO {
     private String profession;
     private String province;
     private String city;
-    private String country;
-    private Role role;
     private String description;
+    private Role role;
+
 
     public UserResponseDTO(User user){
         this.idUser=user.getIdUser();
@@ -42,8 +43,7 @@ public class UserResponseDTO {
         this.profession = user.getProfession() != null ? user.getProfession().getNameProfession() : null;
         this.province = user.getProvince() != null ? user.getProvince().getNameProvince() : null;
         this.city = user.getCity() != null ? user.getCity().getNameCity() : null;
-        this.description = user.getDescription() != null? user.getDescription() : null;
-        this.country = user.getCountry();
+        this.description = user.getDescription();
         this.role = user.getRole();
     }
 }

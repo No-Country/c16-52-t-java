@@ -42,14 +42,9 @@ public class CityService implements ICityService{
     }
 
     @Override
-    public City getCityByName(String name){
-        return cityRepository.findByNameCity(name).orElse(null);
-    }
-
-    @Override
     public City createCity(CityDTO cityDTO){
 
-        Province province = provincesRepository.findByNameProvince(cityDTO.getProvince());
+        Province province = provincesRepository.findById(cityDTO.getIdProvince()).get();
 
         City city = new City();
         city.setNameCity(cityDTO.getNameCity());
@@ -62,5 +57,10 @@ public class CityService implements ICityService{
     public CityDTO getCityDTOById(Integer idCity) {
         CityDTO cityDTO = new CityDTO(cityRepository.findById(idCity).get());
         return cityDTO;
+    }
+
+    @Override
+    public City getCityByName(String city) {
+        return cityRepository.findByNameCity(city);
     }
 }

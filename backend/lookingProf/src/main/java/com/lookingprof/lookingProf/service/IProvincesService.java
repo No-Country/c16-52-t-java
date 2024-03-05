@@ -17,4 +17,5 @@ public interface IProvincesService {
     //get provinceDTO by ID
     public ProvinceResponseDTO getProvinceDtoById(Integer idProvince);
 
+    Province getProvinceByName(String province);
 }
