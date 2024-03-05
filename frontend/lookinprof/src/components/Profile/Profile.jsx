@@ -39,7 +39,7 @@ const Profile = () => {
 
   // Verificar si userData existe y tiene el rol de usuario
   const hasUserRole = userData && userData.role === "USER"; 
-
+  
   return (
     <div className=''>
       {hasUserRole ? <UserProfile /> : <ServiceProfile />}

@@ -16,7 +16,7 @@ const Home = () => {
  // const sortedServicesData = servicesData.sort((a, b) => b.starts - a.starts);
   const professionals = servicesData.filter((item) => item.role === 'PROFESSIONAL');
   const servicesHome = professionals.slice(0, 6);
-
+ 
   useEffect(() => {
     let didCancel = false; 
     const fetchServicesData = async () => {

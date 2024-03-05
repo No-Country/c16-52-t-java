@@ -3,238 +3,213 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, TextField } from '@mui/material'; // Importamos TextField de Material-UI
 import { setCurrentUser } from '../../../redux/slices/userSlice';
-import SelectProvince from '../../../UI/SelectProvince';
+import InputImage from '../../../UI/InputImage';
 import axios from 'axios';
-import {
-    Typography,
-    Select,
-    MenuItem,
-    InputLabel,
-    FormControl,
-} from "@mui/material";
+import Select from "./Select"
 
 const ServiceProfile = () => {
-    const { id } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [decodedPayload, setDecodedPayload] = useState(null);
-    const [userData, setUserData] = useState("")
-    const [provincia, setProvincia] = useState({});
-    const [editMode, setEditMode] = useState(false);
-    const [city, setCity] = useState('');
+
+    const [username, setUsername] = useState("");
+
+    const [profession, setProfession] = useState("");
+    const [professionList, setProfessionList] = useState([]);
+    const [provinceList, setProvinceLIst] = useState([]);
     const [province, setProvince] = useState('');
+    const [cityList, setCityList] = useState([]);
+    const [filteredCities, setFilteredCities] = useState([]);
+    const [city, setCity] = useState('');
     const [about, setAbout] = useState('');
-    const [profession, setProfession] = useState('');
-    const [editedData, setEditedData] = useState({
-        profession: "",
-        city: "",
-        province: "",
-    });
-    const token = localStorage.getItem('jwt');
+    const [file, setFile] = useState(null);
+
+    const [editMode, setEditMode] = useState(false);
+    
+    const [responseUrl, setResponseUrl] = useState(null);
+    
     useEffect(() => {
-
-        const fetchData = async () => {
-            if (token) {
-
-                try {
-                    const response = await axios.get(`http://localhost:8080/user/${id}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        }
-                    });
-                    const decodedPayload = response.data;
-                    setDecodedPayload(decodedPayload);
-
-                } catch (error) {
-                    console.error('Failed to decode or parse the JWT:', error);
-                }
-            }
-        }
-        fetchData()
-    }, [id]);
-    useEffect(() => {
-        const getProvince = async () => {
+        const token = localStorage.getItem('jwt');
+        if (token) {
             try {
-                const response = await axios.get("http://localhost:8080/provinces/get");
-                setProvince(response.data)
+                const [, payload] = token.split('.');
+                const _decodedPayload = JSON.parse(atob(payload));
+                dispatch(setCurrentUser(_decodedPayload));
+                setDecodedPayload(_decodedPayload);
+                // Establecer los valores de los campos editables con los datos del usuario
+                setCity(_decodedPayload.city || '');
+                setProvince(_decodedPayload.province || '');
+                setAbout(_decodedPayload.about || '');
+                setProfession(_decodedPayload.profession || '');
             } catch (error) {
-                console.log(error)
-            }
-
-        }
-        getProvince()
-    }, [setProvince])
-    useEffect(() => {
-        const fetchProfession = async () => {
-            try {
-                const response = await axios.get("http://localhost:8080/profession/get")
-                setProfession(response.data)
-            } catch (error) {
-                console.log(error)
+                console.error('Failed to decode or parse the JWT:', error);
             }
         }
-        fetchProfession()
-    }, [setProfession])
-
-    const handleProvinceChange = (event) => {
-        const selectedProvinceName = event.target.value;
-        setEditedData((prevData) => ({
-            ...prevData,
-            province: selectedProvinceName,
-        }));
-    };
-
-    const handleCityChange = (event) => {
-        const enteredCity = event.target.value;
-        setEditedData((prevData) => ({
-            ...prevData,
-            city: enteredCity,
-        }));
-    };
-    const handleProfessionChange = (event) => {
-        const selectedProfession = event.target.value;
-        setEditedData((prevData) => ({
-            ...prevData,
-            profession: selectedProfession,
-        }));
-    };
-    const handleSaveChanges = async () => {
-        try {
-            const response = await axios.put(
-                `http://localhost:8080/user/${id}`,
-                editedData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                    },
-                }
-            );
-            setUserData(response.data);
-            setEditMode(false);
-        } catch (error) {
-            console.error("Error updating user data:", error);
-        }
-    };
+    }, [dispatch]);
 
     const handleEditButtonClick = () => {
         setEditMode(true);
     };
-    console.log(province)
+
+    const handleSaveButtonClick = () => {
+        // Aquí puedes enviar los datos actualizados al servidor si es necesario
+        // Por simplicidad, aquí solo mostramos cómo cambiar el modo de edición a falso
+        setEditMode(false);
+        handleSubmit();
+    };
+
+    const handleProfessionChange = (event) => {
+        setProfession(event.target.value);
+    };
+    const handleProvinceChange = (event) => {
+        setProvince(event.target.value);
+
+        const filterCities = cityList.filter(city => city.idProvince === parseInt(event.target.value));
+        setFilteredCities(filterCities);
+    };
+    const handleCityChange = (event) => {
+        setCity(event.target.value);
+    };
+    const handleAboutChange = (event) => {
+        setAbout(event.target.value);
+    };
+
+    
+    useEffect(()=>{
+        const fetchData = async (  ) =>{
+            const token = localStorage.getItem('jwt'); 
+            
+            try {
+                const [, payload] = token.split('.');
+                const decodedPayload = JSON.parse(atob(payload));
+                const userId = decodedPayload.id;
+                const response = await axios.get(`http://localhost:8080/user/${userId}`,{
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                } )
+
+                const allProvinces = await axios.get(`http://localhost:8080/provinces/get`,{
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                
+                const allCity = await axios.get(`http://localhost:8080/city/get`,{
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+
+                const allProfessions = await axios.get(`http://localhost:8080/profession/get`,{
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+
+                setProfessionList(allProfessions.data)
+                setProvinceLIst(allProvinces.data)
+                setCityList(allCity.data)
+                const username = response.data.firstName + " " + response.data.lastName;
+                setUsername(username);
+                setProvince(response.data.province)
+                setCity(response.data.city)
+                setAbout(response.data.description)
+                setProfession(response.data.profession)
+                setResponseUrl(response.data.imageUrl)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchData()
+    },[])
+    
+
+    const handleSubmit = async () => {
+        
+    try {
+        const token = localStorage.getItem('jwt');
+        const [, payload] = token.split('.');
+        const decodedPayload = JSON.parse(atob(payload));
+        const userId = decodedPayload.id;
+        const userRole = decodedPayload.role;
+        const userQualify = decodedPayload.qualification;
+
+        const formData = new FormData();
+        formData.append('province', province);
+        formData.append('city', city);
+        formData.append('profession', profession);
+        formData.append('role', userRole);
+        formData.append('description', about);
+
+        // Agregar la imagen al FormData
+        formData.append('image', file);
+        
+    // Aquí puedes enviar formData a tu servidor usando fetch o axios
+        const responseUpdate = axios.put(`http://localhost:8080/user/${userId}`, formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        setEditMode(false);
+        }
+        catch (error) {
+            console.error('Error al enviar los datos actualizados al servidor:', error);
+        }
+    
+    }
+
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
+      };
+
+      
+
     return (
         <div className='flex flex-col justify-center items-center pt-10 pb-5'>
             <div>
-                <section className='flex flex-row gap-8 w-[1100px]'>
-                    <div className='flex flex-col gap-6 m-2'>
-                        <h3>Editar Perfil</h3>
+                <section className='flex flex-row gap-8 justify-center w-[1100px]'>
+                        <form onSubmit={handleSubmit} className='flex flex-col gap-6 m-2 w-1/2'>
                         <div className=''>
-                            <h2 className='text-4xl w-[700px] text-[#004466] font-extrabold'>{decodedPayload?.firstName}</h2>
+                            <h2 className='text-2xl text-[#004466] font-bold pl-2 mb-1'>Como te llamas</h2>
+                            <input type="text" name="" id="" className='border border-gray-400 rounded-full h-12 w-full pt-2 pb-2 pl-6 pr-6 focus:outline-none' value={username} readOnly />
                         </div>
-                        <div>
-                            {editMode ? (
-                                <div>
-                                    <form className="flex flex-col item-center justify-center gap-2 w-full">
-                                        <FormControl sx={{ minWidth: 120 }}>
-                                            <InputLabel id="provincia" size="small">
-                                                Provincia
-                                            </InputLabel>
-                                            <Select
-                                                labelId="provincia"
-                                                label="Provincia"
-                                                value={editedData.province}
-                                                size="small"
-                                                onChange={handleProvinceChange}
-                                            >
-                                                {province.map((province) => (
-                                                    <MenuItem
-                                                        key={province.idProvince}
-                                                        value={province.idProvince}
-                                                    >
-                                                        {province.nameProvince}
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                        <TextField
-                                            helperText="Por favor digíte la ciudad de residencia"
-                                            id="ciudad"
-                                            label="Ciudad"
-                                            size="small"
-                                            value={editedData.city}
-                                            onChange={handleCityChange}
-                                        />
-                                    </form>
 
-                                </div>
-
-
-                            ) : (
-                                <>
-                                    <h5 className='font-semibold'>Lugar de residencia</h5>
-                                    <span>{decodedPayload?.city}, {decodedPayload?.province}</span>
-
-                                </>
-                            )}
+                        <Select label={"Profesion"} options={professionList} onClick={handleProfessionChange} value={profession} editMode={editMode}/>
+                        
+                        <Select label={"Provincia"} options={provinceList} onClick={handleProvinceChange} value={province} editMode={editMode}/>
+                        
+                        <Select label={"Ciudad"} options={filteredCities} onClick={handleCityChange} value={city} editMode={editMode}/>
+                                                
+                        <div className='h-32'>
+                            <h2 className='text-2xl text-[#004466] font-bold pl-2 mb-1'>Acerca de</h2>
+                            <textarea  className='border border-gray-400 rounded-3xl w-full h-full pl-6 pr-6 pt-5 overflow-hidden resize-none text-sm' value={about} onChange={handleAboutChange} readOnly={!editMode} ></textarea>
                         </div>
-                        <div>
 
-                            {editMode ? (
-                                <TextField
-                                    value={about}
-                                    onChange={(e) => setAbout(e.target.value)}
-                                    label="Acerca de"
-                                    variant="outlined"
-                                    fullWidth
-                                    multiline
-                                />
-                            ) : (
-                                <div>
-                                    <h5 className='font-semibold'>Acerca de</h5>
-                                    <p>{decodedPayload?.about}</p>
-                                </div>
-                            )}
+                        <div className='mt-8'>
+                            <input type="file" name='image' className='text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 font-semibold py-2 px-4 border border-blue-400 rounded shadow' onChange={handleFileChange} />
                         </div>
-                        <div>
+                       
+                        </form>
+                    
 
+                    <div className='border-[1px] p-4 rounded-xl shadow-lg w-5/12 flex justify-center align-middle' >
+                        <div className='flex flex-col items-center justify-center w-full'>
+                        {
+                            responseUrl && <img src={'http://localhost:8080/user/images/' + responseUrl} alt='avatar' className='w-[200px] h-[200px] rounded-full p-4' />
+                        }
+                            <h5 className='font-bold text-xl'>{}</h5>
+                            <p className='text-sm'>{}</p>
+                            <p className='text-xs'>{}</p>
+
+                            <InputImage name={username} title={profession} qualification={5} about={about}/>
                             {editMode ? (
-                                <FormControl sx={{ minWidth: 120 }}>
-                                    <InputLabel id="profession-label" size="small">
-                                        Profession
-                                    </InputLabel>
-                                    <Select
-                                        labelId="profession-label"
-                                        label="Profession"
-                                        value={editedData.profession}
-                                        size="small"
-                                        onChange={handleProfessionChange}
-                                    >
-                                        {profession && profession.map((profession) => (
-                                            <MenuItem key={profession.idProfession} value={profession.nameProfession}>
-                                                {profession.nameProfession}
-                                            </MenuItem>
-
-                                        ))}
-                                    </Select>
-                                </FormControl>
-
-                            ) : (
-                                <div>
-                                    <h5 className='font-semibold'>Profesión</h5>
-                                    <span>{decodedPayload?.profession}</span>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                    <div className='border-[1px] p-4 rounded-xl shadow-lg' >
-                        <div className='flex flex-col items-center justify-center w-[300px]'>
-                            <img src={decodedPayload?.imageUrl} alt='avatar' className='w-[200px] h-[200px]' />
-                            <h5 className='font-bold text-xl'>{ }</h5>
-                            <p className='text-sm'>{ }</p>
-                            <p className='text-xs'>{ }</p>
-                            {editMode ? (
-                                <Button variant='contained' color='primary' onClick={handleSaveChanges}>Guardar</Button>
+                                <Button variant='contained' color='primary' onClick={handleSaveButtonClick}>Guardar</Button>
                             ) : (
                                 <Button variant='contained' color='primary' onClick={handleEditButtonClick}>Editar</Button>
                             )}
