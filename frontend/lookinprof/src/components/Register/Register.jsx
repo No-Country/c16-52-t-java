@@ -107,7 +107,7 @@ const Register = () => {
   };
   return (
     <div
-      className=" flex flex-col-reverse lg:relative h-screen lg:justify-center items-center"
+      className=" flex flex-col lg:relative justify-center p-[42px] lg:justify-center items-center"
       style={{
         backgroundImage: `url(${mountain})`,
         backgroundSize: "cover",
@@ -211,6 +211,7 @@ const Register = () => {
                   </InputAdornment>
                 }
                 label="Contraseña"
+                size="small"
                 onChange={handleChange}
                 error={!!formErrors.password}
               />

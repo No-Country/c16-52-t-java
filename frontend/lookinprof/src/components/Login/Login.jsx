@@ -15,16 +15,16 @@ import { setCurrentUser } from "../../redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Typography } from "@mui/material";
+import hombreConDestornillador from "../../assets/hombreConDestornillador.svg";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -48,105 +48,107 @@ const Login = () => {
   };
   const validateEmail = (email) => {
     if (!email) {
-      setEmailError('El correo electrónico es requerido');
+      setEmailError("El correo electrónico es requerido");
       return false;
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError('El formato del correo electrónico no es válido');
+      setEmailError("El formato del correo electrónico no es válido");
       return false;
     }
-    setEmailError('');
+    setEmailError("");
     return true;
   };
 
   const validatePassword = (password) => {
     if (!password) {
-      setPasswordError('La contraseña es requerida');
+      setPasswordError("La contraseña es requerida");
       return false;
     } else if (password.length < 8) {
-      setPasswordError('La contraseña debe tener al menos 8 caracteres');
+      setPasswordError("La contraseña debe tener al menos 8 caracteres");
       return false;
     }
-    setPasswordError('');
+    setPasswordError("");
     return true;
   };
 
- 
-
   const signIn = async (e) => {
     e.preventDefault();
-  
+
     const isEmailValid = validateEmail(email);
     const isPasswordValid = validatePassword(password);
-  
+
     if (!isEmailValid || !isPasswordValid) {
       return;
     }
-  
+
     try {
-      const responseData = await axios.post('http://localhost:8080/auth/login', { email, password },
-        {   
+      const responseData = await axios.post(
+        "http://localhost:8080/auth/login",
+        { email, password },
+        {
           headers: {
             "Access-Control-Allow-Origin": "*",
-                    },}
+          },
+        }
       );
       const token = responseData.data.token;
-  
-      localStorage.setItem('jwt', token);
-      
-  
+
+      localStorage.setItem("jwt", token);
+
       const userResponse = await getUserData(email, token); // Moved the user data retrieval to a separate function
-  
+
       dispatch(setCurrentUser(userResponse.data));
-      
+
       alert(`Hola de nuevo!! ${userResponse.data.firstName}`); // Use userResponse.data instead of currentUser
-  
-      navigate('/');
+
+      navigate("/");
     } catch (error) {
       handleSignInError(error);
     }
   };
-  
+
   // Utility function to decode the payload from token
   function getDecodedPayload(token) {
-    const [payload] = token.split('.');
+    const [payload] = token.split(".");
     return JSON.parse(atob(payload));
   }
-  
+
   // Function to get user data using axios
   async function getUserData(email, token) {
     return await axios.get(`http://localhost:8080/user/email?email=${email}`, {
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-                    
       },
     });
   }
-  
+
   // Function to handle sign-in errors
   function handleSignInError(error) {
     console.log(error);
     if (error.response && error.response.status === 401) {
-      setPasswordError('La contraseña es incorrecta.');
+      setPasswordError("La contraseña es incorrecta.");
     } else {
-      alert('Verifica correo y/o contraseña');
+      alert("Verifica correo y/o contraseña");
     }
   }
 
- 
-  
   return (
-    <div className=" flex flex-col-reverse lg:relative h-screen lg:justify-center items-center" style={{
-      backgroundImage: `url(${mountain})`,
-      backgroundSize: "cover",
-    }}>
-
-
+    <div
+      className=" flex flex-col justify-center p-[42px] lg:relative lg:h-screen "
+      style={{
+        backgroundImage: `url(${mountain})`,
+        backgroundSize: "cover",
+      }}
+    >
+    <div className=" ">
+      <img
+          src={hombreConDestornillador}
+          alt="hombreConDestornillador"
+          className="absolute top-0 left-0 p-[43px] hidden  lg:block h-[600px] "
+        />
+    </div>
       <div className="lg:flex justify-center items-center">
-      
-        
-
         <div className="h-auto relative sm:relative lg:rounded-3xl p-10 z-20  bg-white lg:bottom-[-1px] lg:h-[400px] justify-center">
           <div className="sm:text-sm">
             <Typography variant="h3" gutterBottom>
@@ -154,7 +156,7 @@ const Login = () => {
             </Typography>
           </div>
 
-          <form onSubmit={signIn} className="flex flex-col gap-5 z-10">
+          <form onSubmit={signIn} className="flex flex-col gap-5 relative">
             <TextField
               label="Correo Electrónico"
               placeholder="Correo Electrónico"
