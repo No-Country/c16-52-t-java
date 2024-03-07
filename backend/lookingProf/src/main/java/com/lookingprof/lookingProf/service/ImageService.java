@@ -12,7 +12,7 @@ import java.nio.file.StandardCopyOption;
 public class ImageService {
 
     //SETEO LA RUTA DONDE SE ALMACENARAN LAS IMAGENES DEL PERFIL DEL USUARIO
-    private static final String ABSOLUTE_PATH = "C://Users//54375//Documents//LookingProfImgs";
+    private static final String ABSOLUTE_PATH = "/opt";
 
     public String copyProfileImg(String oldImageUrl, MultipartFile image){
         try{

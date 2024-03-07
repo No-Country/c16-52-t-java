@@ -29,7 +29,7 @@ public class UserController {
 
     private final UserService userService;
 
-    private static final String ABSOLUTE_PATH = "C://Users//54375//Documents//LookingProfImgs";
+    private static final String ABSOLUTE_PATH = "/opt";
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllUsers() {
