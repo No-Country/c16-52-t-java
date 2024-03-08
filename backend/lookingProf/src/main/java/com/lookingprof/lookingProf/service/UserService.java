@@ -303,5 +303,4 @@ public class UserService implements IUserService {
             throw new RuntimeException("No hay usuarios activos registrados");
         }
     }
-
 }

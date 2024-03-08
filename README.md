@@ -1,4 +1,4 @@
-## **c16-52-t-java**
+# LookingProf
 
 # 1. Objetivos Principales
 
@@ -6,12 +6,7 @@
 - Implementar la funcionalidad de búsqueda de servicios.
 - Permitir a los profesionales ofrecer sus servicios.
 - Habilitar la filtración de profesionales por tipo de servicio.
-- Introducir la funcionalidad de solicitud de contacto entre usuarios y profesionales.
-- Establecer un sistema de notificaciones para usuarios y profesionales.
-- Iniciar un chat entre usuario y profesional para coordinar servicios.
-- Permitir a los usuarios dejar feedback y calificaciones sobre el servicio del profecional.
-- Permitir a los profesionales dejar feedback y calificaciones sobre el usuario solicitante de su servicio.
-- Permitir modificaciones y eliminaciones de usuarios y profesionales.
+
 
 ## **1.2 Criterios de Éxito.**
 - 90% de usuarios están satisfechos con la plataforma.
@@ -25,10 +20,8 @@
 - Búsqueda y filtrado de profesionales por tipo de servicio.
 - Búsqueda y filtrado de profesionales por ubicación geográfica. 
 - Sistema de solicitud de contacto.
-- Sistema de feedback y calificaciones entre usuarios y profesionales.
 
 ## **2.2 Funcionalidades Iterativas (Según Iteraciones Posteriores)**
-- Notificaciones push para usuarios y profesionales.
 - Mejoras en la interfaz de usuario.
 - Inicio y gestión de chats entre usuarios y profesionales.
 - Programación de citas y recordatorios.
@@ -51,26 +44,24 @@
 ### **4.1.1 Funcionalidades Principales**
 |Requisito|Descripción|Prioridad|Estado|
 | --- | --- | --- | --- |
-|RF-001|Registro y Autenticación de Usuarios y Profesionales|Alta|En Desarrollo
-|RF-002|Búsqueda y Filtrado de Profesionales por Tipo de Servicio|Alta|Pendiente
-|RF-003|Sistema de Solicitud de Contacto|Media|Pendiente|
-|RF-004|Inicio y Gestión de Chats entre Usuarios y Profesionales|Alta|Pendiente|
-|RF-005|Sistema de Feedback y Calificaciones|Alta|Pendiente|
+|RF-001|Registro y Autenticación de Usuarios y Profesionales|Alta|Finalizada
+|RF-002|Búsqueda y Filtrado de Profesionales por Tipo de Servicio|Alta|Finalizada
+|RF-003|Sistema de Solicitud de Contacto|Media|Finalizada|
+
 
 ### **4.1.2 Funcionalidades Iterativas (Según Iteraciones Posteriores)**
 
 |Requisito|Descripción|Prioridad|Estado|
 | --- | --- | --- | --- |
-|RF-006|Notificaciones Push para Usuarios y Profesionales|Media|Pendiente|
-|RF-007|Mejoras en la Interfaz de Usuario|Alta|Pendiente|
-|RF-008|Programación de Citas y Recordatorios|Alta|Pendiente|
+|RF-004|Mejoras en la Interfaz de Usuario|Alta|Pendiente|
+|RF-005|Programación de Citas y Recordatorios|Alta|Pendiente|
 
 ### **4.1.3 Funcionalidades Avanzadas (Iteraciones Posteriores)**
 |Requisito|Descripción|Prioridad|Estado|
 | --- | --- | --- | --- |
-|RF-009|Integración con Servicios de Pago|Alta|Pendiente|
-|RF-010|Ampliación de Categorías de Servicios|Alta|Pendiente|
-|RF-011|Desarrollo de una Aplicación Móvil Complementaria|Media|Pendiente|
+|RF-007|Integración con Servicios de Pago|Alta|Pendiente|
+|RF-008|Ampliación de Categorías de Servicios|Alta|Pendiente|
+|RF-009|Desarrollo de una Aplicación Móvil Complementaria|Media|Pendiente|
 
 
 
@@ -92,10 +83,23 @@ La plataforma estará disponible solo en español inicialmente.
 El soporte para navegadores será limitado a las últimas versiones de Chrome, Firefox y Safari.
 
 # **Roles:**
-- Backend: Rubén Ledesma / Lucas Caro / Mauro Caceres / Hans Urpay / Elián Bargaz
-- Frontend: Lesly Sharom Cueto Tipte / Leandro Lanza / Jessica Ortiz Ospina
-- Tester: Giorgina Spezia /
-- Diseño UX/UI: Lesly Sharom Cueto Tipte / Leandro Lanza / Florencia Alvarez
+## Backend:
+  - Rubén Ledesma <a href="https://www.linkedin.com/in/rub%C3%A9n-ledesma/" target="_blank">LinkedIn</a>
+  - Lucas Caro <a href="https://www.linkedin.com/in/lucas-nahuel-caro/" target="_blank">LinkedIn</a>
+  - Mauro Caceres <a href="https://www.linkedin.com/in/mauro-caceres-946696265/" target="_blank">LinkedIn</a>
+  - Hans Urpay <a href="https://www.linkedin.com/in/hans-urpay/ " target="_blank">LinkedIn</a>
+  - Elián Bargaz <a href="https://www.linkedin.com/in/elianbargaz/" target="_blank">LinkedIn</a>
+    
+## Frontend:
+  - Leandro Lanza <a href="https://www.linkedin.com/in/leandro-lanza/" target="_blank">LinkedIn</a>
+    
+  - Jessica Ortiz Ospina <a href="http://www.linkedin.com/in/jessica-ortiz-ospina" target="_blank">LinkedIn</a>
+    
+## Tester: 
+  -Giorgina Spezia <a href="https://www.linkedin.com/in/giorgina-spezia-072817257/" target="_blank">LinkedIn</a>
+## Diseño UX/UI:
+  - Lesly Sharom Cueto Tipte <a href="https://www.linkedin.com/in/lesly-cueto/" target="_blank">LinkedIn</a>
+  - Florencia Alvarez <a href="https://www.linkedin.com/in/florencia-victoria-alvarez-532019158/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank">LinkedIn</a>
 
 
 # **Tecnologías y herramientas a utilizar:**

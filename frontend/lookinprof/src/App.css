@@ -2,51 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-.active-nav {
-  @apply relative;
-}
-
-.active-nav::after {
-  @apply block;
-  content: '';
-  width: 1.2rem;
-  height: 1.2rem;
-  background-color: var(--color-primary); /* No se puede convertir directamente, asegúrate de definir --color-primary en tu configuración de Tailwind */
-  @apply absolute;
-  left: calc(50% - 0.6rem);
-  transform: rotate(45deg);
-  margin-top: 0.9rem;
-}
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
