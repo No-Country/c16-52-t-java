@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  looking-prof:
+    container_name: looking-prof
+    image: looking-prof:1
+    build: .
+    ports:
+      - "8086:8086"
+    environment:
+      - DATABASE_URL=jdbc:mysql://mysql-db-looking:3306/looking_prof
+      - DATABASE_USERNAME=root
+      - DATABASE_PASSWORD=root
+    depends_on:
+      - mysql-db-looking
+    networks:
+      - 'looking_prof-network' 
+  mysql-db-looking:
+    container_name: mysql-db-looking
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    environment:
+     - MYSQL_PASSWORD=root
+     - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - 'looking_prof-network'
+volumes:
+  mysql-db-looking-data:
+  
+networks:
+  looking_prof-network:
